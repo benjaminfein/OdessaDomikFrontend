@@ -1,0 +1,1881 @@
+:root{
+    --margin-sides-for-all: 80px;
+    --color-main-page: #F7B581;
+    --second-color: #fdde89;
+    --main-header-color: #ffac6ca9;
+    --footer-color: #ffd390c4;
+    --fonts-lora: "Lora", serif;
+    --slava-color: #bbae3c;
+    --phones-header-color: rgb(224, 182, 103);
+}
+
+/* * {
+    outline: solid green 4px;
+} */
+
+@media screen and (min-width: 1024px) {
+    .empty-div{
+        display: none;
+        height: 0;
+        width: 0;
+    }
+    html, body{
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        height: 100%;
+    }
+    .wrapper{
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    .my-footer {
+        padding-top: 50px;
+        bottom: 0;
+        width: 100%;
+        height: 150px;
+        background-color: var(--footer-color);
+        text-align: center;
+        color: black;
+        font-family: "Nunito", sans-serif;
+    }
+
+    .logo {
+        font-size: clamp(1rem, 2vw, 2rem);
+        font-family: "Inknut Antiqua", serif;
+        color: white;
+        background-color: #bbae3c;
+        text-align: center;
+        padding: 10px 15px;
+        border-radius: 7px;
+        user-select: none;
+        text-decoration: none;
+    }
+
+    .under-logo-sign {
+        font-size: clamp(0.8rem, 1.6vw, 2.1rem);
+        margin: 0;
+    }
+
+    .navigation {
+        width: 50%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .navigation a {
+        display: flex;
+        cursor: pointer;
+        position: relative;
+        font-size: clamp(0.4rem, 1vw, 1.2rem);
+        font-family: var(--fonts-lora);
+        color: #fff;
+        font-weight: 600;
+        text-decoration: none;
+        transition: .5s;
+        height: 50px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .navigation .dropdown-header-wrapper button {
+        cursor: pointer;
+        position: relative;
+        color: #fff;
+        font-weight: 600;
+        text-decoration: none;
+        transition: .5s;
+    }
+
+    .navigation a span,
+    .navigation .dropdown-header-wrapper button span {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #bbae3c;
+        border-radius: 30px;
+        z-index: -1;
+        transform: scale(1);
+        transition: .5s;
+        opacity: 1;
+    }
+
+    .navigation a:hover span,
+    .navigation a.active span,
+    .navigation .dropdown-header-wrapper button:hover span {
+        background: black;
+    }
+
+    .dropdown-header-wrapper button {
+        background: transparent;
+        border: none;
+    }
+    .dropdown-header-wrapper {
+        position: relative;
+        display: inline-block;
+        padding: 0;
+    }
+
+    .dropdown-header {
+        opacity: 0;
+        border-radius: 10px;
+        position: absolute;
+        padding: 0 25px 0 0;
+        background-color: rgb(177, 177, 177);
+        border: solid 1px rgb(78, 78, 78);
+        top: calc(100% + 10px);
+        transition: .3s ease;
+        pointer-events: none;
+    }
+
+    .dropdown-header a {
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 18px;
+        border-radius: 5px;
+        user-select: none;
+        cursor: pointer;
+        width: 100%;
+        display: block;
+        transition: .2s ease;
+        padding: 10px 8px;
+        position: relative;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .dropdown-header.open {
+        opacity: 1;
+        pointer-events: auto; /* Включаем кликабельность */
+        transform: translateY(0);
+    }
+
+    .bi {
+        transition: .3s ease;
+        margin-left: 8px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .account-button-header {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        padding: 0 20px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .burger-menu {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+    }
+    
+    .burger-menu div {
+        width: 30px;
+        height: 4px;
+        background-color: white;
+        margin: 5px 0;
+        transition: 0.3s;
+    }
+    
+    /* Мобильное меню (изначально скрыто) */
+    .mobile-nav {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background: rgba(0, 0, 0, 0.9);
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .mobile-nav a {
+        color: white;
+        font-size: 1.2rem;
+        padding: 10px 0;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    button:focus i {
+        transform: rotate(180deg);
+    }
+
+    .fixed-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        padding: 30px 0;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        font-family: "Nunito", sans-serif;
+    }
+
+    .absolute-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 30px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        background-color: lightgrey;
+        font-family: "Nunito", sans-serif;
+    }
+
+    .header-container {
+        width: 90%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #text {
+        position: absolute;
+        font-size: 5em;
+        color: var(--color-main-page);
+        user-select: none;
+    }
+
+    .parallax {
+        /* opacity: 0.75; */
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+        /* background: url('https://live.staticflickr.com/65535/54391048030_54cdf88ba4_b.jpg') no-repeat; */
+        background: url('https://live.staticflickr.com/65535/54281842191_0e81b7de97_k.jpg') no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+    
+    .parallax::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: inherit; /* Наследуем фон */
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        /* filter: blur(5px); */
+        z-index: -1; /* Отправляем назад */
+    }
+
+    .wrapper-parallax {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        flex-direction: row;
+        gap: 20px;
+        width: 800px;
+        height: 100px;
+        background: #fff;
+        border-radius: 7px;
+        padding: 0 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
+        transition: .5s ease-in-out .5s;
+    }
+
+    .search-button {
+        font-size: 20px;
+        background-color: var(--slava-color);
+        color: #fff;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+        transition: .5s;
+    }
+
+    .search-button:hover {
+        background-color: black;
+    }
+
+    .dropdown-calendar {
+        width: 50%;
+        min-height: 60px;
+        border: none;
+        display: flex;
+        align-items: center;
+        border-radius: 5px;
+        box-shadow: 1px 1px 8px black;
+    }
+
+    .dropdown-calendar:hover {
+        box-shadow: 1px 1px 8px rgb(0, 40, 77);
+    }
+
+    .dropdown-calendar .calendar-button {
+        width: 100%;
+        height: 100%;
+        border: none;
+        font-weight: 600;
+        user-select: none;
+        transition: .2s;
+        background-color: transparent;
+    }
+
+    .calendar-component {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .75s ease, visibility .75s ease;
+
+        border-radius: 5px;
+        top: calc(53% + 20px);
+        position: absolute;
+        z-index: 999;
+        box-shadow: 1px 1px 15px black;
+    }
+
+    .calendar-component.show {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity .75s ease, visibility .75s ease;
+    }
+
+    .calendar-component .calendar {
+        transition: .2s;
+    }
+
+    .react-calendar__month-view__days__day--neighboringMonth {
+        visibility: hidden; /* Скрывает дни */
+        pointer-events: none; /* Делаем их некликабельными */
+    }
+
+    .react-calendar__navigation button:not(:first-child):not(:last-child) {
+        pointer-events: none;
+    }
+
+    .react-calendar {
+        border-radius: 5px;
+        overflow: hidden; /* Чтобы внутренние элементы не выходили за границы */
+    }
+
+    .dropdown-calendar img {
+        width: 25px;
+        height: 25px;
+        margin: 0 5px 7px 0;
+    }
+
+    .dropdown-guests-count {
+        width: 50%;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 1px 1px 8px black;
+    }
+
+    .dropdown-guests-count:hover {
+        box-shadow: 1px 1px 8px rgb(0, 40, 77);
+    }
+
+    .dropdown-guests-count img {
+        width: 25px;
+        height: 25px;
+        margin: 0 5px 5px 0;
+    }
+
+    .dropdown-guests-count .dropdown-chevron {
+        width: 25px;
+        height: 25px;
+        margin: 0 0 3px 3px;
+    }
+
+    .dropdown-guests-count .counter-button {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: none;
+        font-weight: 600;
+        user-select: none;
+        transition: .2s;
+        cursor: pointer;
+        background-color: transparent;
+        padding: 10px 20px;
+    }
+
+    .guest-counter-component {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .75s ease, visibility .75s ease;
+
+        border-radius: 5px;
+        background-color: #fff;
+        flex-direction: column;
+        display: flex;
+        align-items: center;
+        width: 400px;
+        font-weight: 600;
+        min-height: 70px;
+        padding: 20px 20px;
+        gap: 30px;
+        top: calc(53% + 21px);
+        position: absolute;
+        z-index: 999;
+        box-shadow: 1px 1px 15px black;
+    }
+
+    .counter-line {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        font-size: 16px;
+    }
+
+    .dec-inc-counter {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .counter-btn {
+        background: #fff;
+        border: none;
+        padding: 5px 10px;
+        font-size: 25px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .counter-btn:hover {
+        background: #eee;
+    }
+
+    .counter-line-text {
+        display: flex;
+        align-items: center;
+        padding: 0;
+        margin: 0;
+    }
+
+    .confirm-btn {
+        width: 100%;
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .guest-counter-component.show {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity .75s ease, visibility .75s ease;
+    }
+
+    .about-us-container {
+        gap: 300px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .about-natalia {
+        display: flex;
+        background-color: lightgrey;
+        box-shadow: 0px -9px 15px -3px rgba(211, 211, 211, 0.2);
+        padding: 50px 100px;
+        z-index: 1000;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .about-natalia-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .about-natalia-title {
+        margin-bottom: 20px;
+    }
+
+    .about-natalia-img{
+        border-radius: 10px;
+    }
+
+    .about-natalia-text {
+        font-size: 28px;
+    }
+
+    .about-more-button {
+        background-color: #bbae3c;
+        width: 35%;
+        height: 40px;
+        text-decoration: none;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 7px;
+        transition: .5s;
+    }
+
+    .about-more-button:hover {
+        background-color: black;
+    }
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    .my-page {
+        margin-top: 210px;
+        flex: 1;
+        overflow: hidden;
+        background-color: white;
+        font-family: "Nunito", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .my-main-page {
+        flex: 1;
+        overflow: hidden;
+        background-color: white;
+        font-family: "Nunito", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .container>.my-table {
+        width: 90%;
+        max-width: 1200px;
+        border-collapse: collapse;
+        margin: 0 auto;
+    }
+
+    .my-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #000000;
+    }
+      
+    .my-table th, .my-table td {
+        border: 1px solid #000000;
+        padding: 8px;
+        text-align: center;
+    }
+      
+    .my-table thead {
+        background-color: #f8f9fa;
+    }
+      
+    .my-table tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+    }
+      
+    .my-table tbody tr:nth-child(even) {
+        background-color: white;
+    }
+    
+    th, td {
+        text-align: left;
+        padding: 8px; /* Добавляет внутренние отступы */
+        word-wrap: break-word; /* Перенос длинных слов */
+    }
+
+    .container>.row {
+        margin-left: 0; /* Замени 120px на 0 */
+        margin-right: auto; /* Убери или замени */
+    }
+    
+    .container-buttons {
+        display: flex;
+        justify-content: space-around;
+    }
+    
+    .btn {
+        color: #0D6EFD;
+    }
+
+    .apartments-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 20px 20px 20px 0;
+        margin-bottom: 100px;
+    }
+
+    .apartment-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.2s;
+        max-width: 350px;
+        margin: 0 auto;
+    }
+
+    .apartment-card:hover {
+        transform: scale(1.03);
+    }
+
+    .apartment-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .apartment-body {
+        display: flex;
+        flex-direction: column;
+        padding: 15px;
+        flex-grow: 1;
+    }
+
+    .apartment-title {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    .apartment-text {
+        font-size: 0.9rem;
+        flex-grow: 1;
+    }
+
+    .apartment-price {
+        font-size: 1.5rem;
+        font-weight: bold;
+        /* color: #2a9d8f; */
+        margin-top: auto;
+    }
+
+    .apartment-btn {
+        display: block;
+        text-align: center;
+        background: #007bff;
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+        user-select: none;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+
+    .apartment-btn:hover {
+        background: #0056b3;
+    }
+
+    .about-apartment-name{
+        margin: 40px 0 0 var(--margin-sides-for-all);
+    }
+
+    .about-apartment-address{
+        margin-left: var(--margin-sides-for-all);
+    }
+
+    .admin-table-apartment {
+        width: 90%;
+        border-collapse: collapse;
+        margin: 0 auto;
+    }
+
+    .my-container {
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto; /* Центровка на странице */
+    }
+
+    .about-first-section {
+        display: flex;
+    }
+
+    .carousel {
+        flex: 1; /* Занимает больше места, чем описание */
+        position: absolute;
+        left: 0; /* Сдвигаем карусель к левому краю */
+        top: 0; /* Регулируем вертикальное положение */
+        width: 100%;
+        height: auto;
+        margin: 20px 20px 20px var(--margin-sides-for-all); /* Добавляем отступы по желанию */
+    }
+    .carousel-inner img{
+        max-height: 530px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+    .carousel-indicators {
+        left: 0;
+        right: auto;
+    }
+
+    .short-description-and-map{
+        margin-right: var(--margin-sides-for-all);
+        flex: 1; /* Описание занимает меньше места */
+        display: flex;
+        flex-direction: column; /* Элементы располагаются вертикально */
+        align-items: center; /* Центрирование содержимого */
+    }
+
+    .about-apartment-short-description{
+        margin: 20px 0 20px 100px;
+        width: 80%; /* Ширина для описания */
+        text-align: left;
+        max-height: 200px;
+    }
+
+    .reservation-payment-content {
+        display: flex;
+        align-items: center;
+    }
+
+    .apartment-price {
+        margin: 0 40px 40px 0;
+        font-size: 28px;
+    }
+
+    .error-message-reservation {
+        font-size: 20px;
+    }
+
+    .about-second-section {
+        margin: 20px 80px;
+        display: flex;
+        justify-content: space-between; /* Размещает элементы по краям */
+        align-items: flex-start; /* Выравнивает элементы по верхнему краю */
+    }
+
+    .reservation-button {
+        margin: 0 40px 40px 40px;
+        font-size: 20px;
+        font-weight: 700;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
+        text-decoration: none;
+        color: #ddd;
+        height: 60px;
+        width: 180px;
+        border-style: none;
+        background-color: #007bff;
+        border-radius: 5px;
+        box-shadow: 3px 4px 11px 0px rgba(34, 60, 80, 0.43);
+        transition: .5s;
+    }
+
+    .reservation-button:hover {
+        background-color: #0056b3;
+    }
+
+    .reservation-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+    
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Черный фон с прозрачностью */
+        z-index: 2000; /* Обеспечивает, что оверлей будет поверх всего */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: white !important;
+        padding: 3em 5em;
+        border-radius: 8px !important;
+        z-index: 2001;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        max-width: 85%;
+        max-height: 95vh;
+        overflow-y: auto;
+        position: relative;
+    }
+
+    .modal-text {
+        margin: 0;
+    }
+
+    .modal-submit-button {
+        border: none;
+        border-radius: 5px;
+        background-color: #bbae3c;
+        color: white;
+        width: 300px;
+        height: 60px;
+        transition: .5s;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .modal-submit-button:hover {
+        background-color: black;
+    }
+
+    .modal-submit-button:disabled {
+        background-color: #ccc;
+        color: black;
+        cursor: not-allowed;
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 1.5em;
+        right: 2.5em;
+        width: 40px;
+        height: 40px;
+        background-color: transparent;
+        border: none;
+        font-size: 20px;
+        color: black;
+        cursor: pointer;
+        z-index: 2002;
+        border-radius: 5px;
+        transition: .5s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        user-select: none;
+    }
+
+    .close-modal:hover {
+        background-color: gray;
+    }
+
+    .email-template {
+        width: 50%;
+    }
+
+    .modal-call-manager {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        width: 50%;
+        padding: 0 3em 0 7em;
+        font-size: 20px;
+    }
+
+    .phone-number-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .copy-button {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .modal-do-u-agree-label {
+        user-select: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .modal-do-u-agree-label input {
+        width: 15px;
+        height: 15px;
+        transform: scale(1.5);
+        cursor: pointer;
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+        background-color: transparent;
+        border: none;
+        font-size: 20px;
+        color: black;
+        cursor: pointer;
+        z-index: 2002; /* Кнопка должна быть поверх модального окна */
+    }
+
+    #map{
+        margin: 20px 0 20px 100px;
+        height: 300px;
+        width: 80%;
+        text-align: left;
+        border-radius: 4px;
+    }
+
+    .cards-designations {
+        display: flex; /* Карточки располагаются в одну строку */
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 16px;
+        width: 50%;
+    }
+
+    .col {
+        max-width: 300px;
+        min-width: 0;
+    }
+
+    .card-designations {
+        display: flex; /* Иконка и текст в строку */
+        align-items: center; /* Вертикальное выравнивание */
+        gap: 8px; /* Расстояние между иконкой и текстом */
+        padding: 8px 12px; /* Внутренние отступы */
+        border: 1px solid #ddd; /* Лёгкая рамка */
+        border-radius: 8px; /* Скруглённые углы */
+        background-color: rgb(255, 253, 250); /* Бежевый фон */
+        flex: 1 1 auto; /* Подстраивается под текст */
+        min-width: 120px; /* Минимальная ширина */
+    }
+
+    .about-card-body {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap; /* если не стоит */
+        gap: 10px;
+    }
+
+    .small-images-designations {
+        width: 28px; /* Размер иконки */
+        height: 28px;
+        margin-right: 3px;
+    }
+
+    .container-text-about {
+        margin-top: 5px;
+        max-width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+
+    .parking-and-wifi-container-text-about {
+        margin-top: 9px;
+        align-items: center;
+    }
+
+    .text-designation {
+        max-height: 24px;
+        font-size: 16px; /* Размер текста */
+    }
+
+    .about-description {
+        margin: 20px var(--margin-sides-for-all);
+    }
+
+    .login-form{
+        justify-content: center;
+    }
+
+    .register-form {
+        justify-content: center;
+    }
+    
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        transition: background-color 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    .list-of-apartments-text {
+        margin: 60px 0;
+    }
+
+    .sort-button {
+        margin: 80px 0 10px 0;
+    }
+
+    .admin-table-reservation {
+        width: 90%;
+        border-collapse: collapse;
+        margin: 0 auto;
+    }
+
+    .reservations-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Прозрачный затемняющий фон */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000; /* Поверх других элементов */
+    }
+
+    .reservations-modal {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        width: 300px;
+    }
+
+    .admin-table-reservation .status-confirmed {
+        background-color: rgb(183, 255, 183) !important;
+    }
+    
+    .admin-table-reservation .status-pending {
+        background-color: rgb(255, 255, 184) !important;
+    }
+    
+    .admin-table-reservation .status-canceled {
+        background-color: rgb(248, 164, 164) !important;
+    }
+
+    /* Overlay для замыливания фона */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5); /* Черный полупрозрачный фон */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999; /* Чтобы перекрыть все остальные элементы */
+    }
+    
+    /* Контейнер для лоадера и текста */
+    .loader-container {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Кружок-лоадер */
+    .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+    }
+    
+    /* Текст загрузки */
+    .loading-text {
+        margin-top: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    /* Анимация вращения для лоадера */
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .scroll-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background-color: #bbae3c;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.3s, transform 0.3s;
+        opacity: 0;
+        transform: translateY(20px);
+        z-index: 10000;
+    }
+
+    .scroll-to-top.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .calendar-phones {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .calendar {
+        display: none;
+    }
+
+    .dropdown-calendar .calendar-button {
+        width: 100%;
+        height: 100%;
+        border: none;
+        user-select: none;
+        transition: .2s;
+        border-radius: 5px;
+        background-color: white;
+    }
+
+    .search-button {
+        background-color: #007bff;
+    }
+
+    .calendar-component {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .75s ease, visibility .75s ease;
+        border-radius: 5px;
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        z-index: 999;
+        box-shadow: 1px 1px 11px black;
+    }
+
+    .calendar-component.show {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity .75s ease, visibility .75s ease;
+    }
+
+    .calendar-component .calendar-phones {
+        transition: .2s;
+    }
+
+    .main-search-images {
+        width: 25px;
+        height: 25px;
+        font-weight: 600;
+    }
+
+    .dropdown-guests-count {
+        position: relative;
+        display: inline-block
+    }
+
+    .dropdown-guests-count .dropdown-chevron {
+        width: 25px;
+        height: 25px;
+        margin: 0 0 3px 3px;
+    }
+
+    .counter-button {
+        background-color: white;
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .guest-counter-component {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .75s ease, visibility .75s ease;
+        border-radius: 5px;
+        background-color: white;
+        box-shadow: 1px 1px 11px black;
+        padding: 30px 60px;
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        z-index: 999;
+    }
+
+    .guest-counter-component.show {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity .75s ease, visibility .75s ease;
+    }
+
+    .counter-line {
+        padding-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        font-size: 16px;
+        gap: 50px;
+    }
+
+    .counter-line-text {
+        display: flex;
+        align-items: center;
+        padding: 0;
+        margin: 0;
+    }
+
+    .dec-inc-counter {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .counter-btn {
+        background: #fff;
+        border: none;
+        padding: 5px 10px;
+        font-size: 25px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: all .5s;
+    }
+
+    .counter-btn:hover {
+        background: #eee;
+    }
+
+    .confirm-btn {
+        width: 100%;
+        border: 3px solid #f0bb59;
+        background-color: white;
+        color: black;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .parallax {
+        background: url('https://live.staticflickr.com/65535/54445143020_c09605fef9_b.jpg') no-repeat;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+         /* opacity: 0.75; */
+         position: relative;
+         height: 100vh;
+         background-size: cover;
+         background-position: center;
+         background-attachment: fixed;
+    }
+
+    .wrapper-parallax {
+        position: relative;
+        width: 90%;
+        top: 35%;
+        display: flex;
+        flex-direction: column;
+        background-color: #f0bb59;
+        border: 2px solid #f0bb59;
+        border-radius: 8px;
+    }
+
+    .wrapper-parallax > * {
+        border: 2px solid #f0bb59;
+        border-radius: 8px;
+        height: 50px;
+    }
+
+    .logo {
+        font-size: clamp(1.2rem, 1.8vw, 2.3rem);
+        font-family: "Inknut Antiqua", serif;
+        color: var(--phones-header-color);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        font-weight: 600;
+        text-align: start;
+        padding: 10px 15px;
+        border-radius: 7px;
+        text-decoration: none;
+    }
+
+    .under-logo-sign {
+        font-size: clamp(1.6rem, 2vw, 2.5rem);
+        margin: 0;
+    }
+
+    .fixed-header {
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 30px 0;
+        position: fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        font-family: "Nunito", sans-serif;
+    }
+
+    .header-container {
+        width: 90%;
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+    }
+
+    .absolute-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        background-color: lightgrey;
+        font-family: "Nunito", sans-serif;
+    }
+
+    .my-page {
+        margin-top: 150px;
+        flex: 1;
+        overflow: hidden;
+        background-color: white;
+        font-family: "Nunito", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .my-main-page {
+        flex: 1;
+        overflow: hidden;
+        background-color: white;
+        font-family: "Nunito", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .navigation {
+        display: none;
+    }
+
+    .burger-menu {
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+        background-color: transparent;
+        height: 70px;
+        padding: 6px 10px;
+        border-radius: 5px;
+        align-items: center;
+        justify-content: center;
+        transition: .5s ease;
+    }
+
+    .burger-menu.open {
+        background-color: var(--phones-header-color);
+    }
+
+    .burger-menu.open div {
+        background-color: white;
+        box-shadow: none;
+    }
+
+    .burger-menu div {
+        width: 30px;
+        height: 4px;
+        background-color: var(--phones-header-color);
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        margin: 5px 0;
+        transition: 0.5s ease;
+        border-radius: 2px;
+    }
+
+    .mobile-nav {
+        opacity: 0;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 110px;
+        right: 0;
+        background: rgba(0, 0, 0, 0.9);
+        pointer-events: none;
+        width: 100%;
+        padding: 20px;
+        transition: .5s ease;
+    }
+
+    .mobile-nav.open {
+        display: flex;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .mobile-nav a {
+        color: white;
+        font-size: 1.2rem;
+        padding: 10px 0;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        text-decoration: none;
+    }
+
+    .apartments-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        padding: 15px 15px 15px 0;
+    }
+
+    .apartment-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 15px;
+        overflow: hidden;
+        max-width: 300px;
+        transition: transform 0.2s;
+    }
+
+    .apartment-img {
+        height: 180px;
+        object-fit: cover;
+    }
+
+    .apartment-body {
+        padding: 12px;
+    }
+
+    .apartment-title {
+        font-size: 1.1rem;
+        color: #333;
+    }
+
+    .apartment-text {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .apartment-price {
+        font-size: 1.3rem;
+    }
+
+    .apartment-btn {
+        display: block;
+        background: #007bff;
+        color: white;
+        padding: 9px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        transition: 0.3s ease-in-out;
+        text-align: center;
+        text-decoration: none;
+        margin-top: 10px;
+    }
+
+    .apartment-btn:hover {
+        background: #0056b3;
+    }
+
+    .scroll-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background-color: #bbae3c;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.3s, transform 0.3s;
+        opacity: 0;
+        transform: translateY(20px);
+        z-index: 10000;
+    }
+
+    .scroll-to-top.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .sort-button {
+        margin: 34px 0 10px 0;
+    }
+
+    .my-footer {
+        padding-top: 50px;
+        bottom: 0;
+        width: 100%;
+        height: 150px;
+        background-color: var(--footer-color);
+        text-align: center;
+        color: black;
+        font-family: "Nunito", sans-serif;
+    }
+
+    .about-natalia {
+        margin: 300px 0;
+        display: flex;
+        background-color: lightgrey;
+        box-shadow: 0px -90px 20px 20px lightgrey,
+                    0px 90px 20px 20px lightgrey;;
+        z-index: 1000;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .about-natalia-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .about-natalia-title {
+        margin-bottom: 20px;
+    }
+
+    .about-natalia-img{
+        border-radius: 10px;
+    }
+
+    .about-natalia-text {
+        font-size: 28px;
+    }
+
+    .about-more-button {
+        background-color: #bbae3c;
+        width: 35%;
+        height: 40px;
+        text-decoration: none;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 7px;
+        transition: .5s;
+    }
+
+    .about-more-button:hover {
+        background-color: black;
+    }
+}
+
+/* @media screen and (max-width: 767px) {
+    .wrapper-parallax {
+        flex-direction: column;
+        height: auto; 
+        padding: 20px;
+        gap: 10px; 
+        width: 95%;
+    }
+
+    .search-button {
+        background-color: var(--slava-color);
+        width: 100%;
+        font-size: 18px;
+        padding: 10px;
+    }
+
+    .logo {
+        font-size: clamp(1rem, 2vw, 2.5rem);
+        font-family: "Inknut Antiqua", serif;
+        color: white;
+        background-color: #bbae3c;
+        text-align: center;
+        padding: 10px 15px;
+        border-radius: 7px;
+        user-select: none;
+        text-decoration: none;
+    }
+
+    .fixed-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        padding: 20px 70px;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 100;
+        font-family: "Nunito", sans-serif;
+    }
+
+    .absolute-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px 70px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 100;
+        background-color: lightgrey;
+        font-family: "Nunito", sans-serif;
+    }
+
+    .my-page {
+        margin-top: 120px;
+        flex: 1;
+        overflow: hidden;
+        background-color: rgb(255, 253, 250);
+        font-family: "Nunito", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .navigation {
+        display: none;
+    }
+
+    .burger-menu {
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+        background-color: var(--slava-color);
+        padding: 6px 10px;
+        border-radius: 5px;
+        align-items: center;
+        transition: .5s ease;
+    }
+
+    .burger-menu.open {
+        background-color: black;
+    }
+
+    .mobile-nav.open {
+        display: flex;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .burger-menu div {
+        width: 30px;
+        height: 4px;
+        background-color: white;
+        margin: 5px 0;
+        transition: 0.5s ease;
+    }
+
+    .mobile-nav {
+        opacity: 0;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 94px;
+        right: 0;
+        background: rgba(0, 0, 0, 0.9);
+        width: 100%;
+        padding: 20px;
+        transition: .5s ease;
+        pointer-events: none;
+    }
+
+    .mobile-nav a {
+        color: white;
+        font-size: 1.2rem;
+        padding: 10px 0;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        text-decoration: none;
+    }
+
+    .apartments-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .apartment-card {
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 15px;
+        overflow: hidden;
+        max-width: 250px;
+    }
+
+    .apartment-img {
+        height: 150px;
+    }
+
+    .apartment-body {
+        padding: 10px;
+    }
+
+    .apartment-title {
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .apartment-text {
+        font-size: 0.8rem;
+        color: #666;
+    }
+
+    .apartment-price {
+        font-size: 1.2rem;
+    }
+
+    .apartment-btn {
+        display: block;
+        background: #007bff;
+        color: white;
+        padding: 8px;
+        border-radius: 5px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        transition: 0.3s ease-in-out;
+        text-align: center;
+        text-decoration: none;
+        margin-top: 10px;
+    }
+
+    .apartment-btn:hover {
+        background: #0056b3;
+    }
+
+    .scroll-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background-color: #bbae3c;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.3s, transform 0.3s;
+        opacity: 0;
+        transform: translateY(20px);
+        z-index: 10000;
+    }
+
+    .scroll-to-top.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .sort-button {
+        margin: 34px 0 10px 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .fixed-header {
+        padding: 15px 22px;
+    }
+
+    .absolute-header {
+        padding: 15px 22px;
+    }
+
+    .apartments-grid {
+        grid-template-columns: 1fr;
+        align-items: center;
+    }
+
+    .apartment-card {
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 15px;
+        overflow: hidden;
+        max-width: 220px;
+    }
+
+    .apartment-img {
+        height: 130px;
+    }
+
+    .apartment-body {
+        padding: 8px;
+    }
+
+    .apartment-title {
+        font-size: 0.9rem;
+        color: #333;
+    }
+
+    .apartment-text {
+        font-size: 0.75rem;
+        color: #666;
+    }
+
+    .apartment-price {
+        font-size: 1.1rem;
+    }
+
+    .apartment-btn {
+        display: block;
+        background: #007bff;
+        color: white;
+        padding: 7px;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        transition: 0.3s ease-in-out;
+        text-align: center;
+        text-decoration: none;
+        margin-top: 10px;
+    }
+
+    .apartment-btn:hover {
+        background: #0056b3;
+    }
+} */
