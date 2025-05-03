@@ -1,35 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Calendar from 'react-calendar';
 import '../../node_modules/react-calendar/src/Calendar.css';
-import Cookies from "js-cookie";
+import { useTranslation } from 'react-i18next';
 
 function CalendarComponent({ dates, setDates }) {
   const [activeStartDate, setActiveStartDate] = useState(new Date());
   const [isNavigating, setIsNavigating] = useState(false);
   const calendarRef = useRef(null);
-  const days = {
-    "Mon": "Пн",
-    "Tue": "Вт",
-    "Wed": "Ср",
-    "Thu": "Чт",
-    "Fri": "Пт",
-    "Sat": "Сб",
-    "Sun": "Вс"
-  };
-  const months = {
-    "Jan": "янв.",
-    "Feb": "февр.",
-    "Mar": "марта",
-    "Apr": "апр.",
-    "May": "мая",
-    "Jun": "июня",
-    "Jul": "июля",
-    "Aug": "авг.",
-    "Sep": "сент.",
-    "Oct": "окт.",
-    "Nov": "нояб.",
-    "Dec": "дек."
-  };
+  const { t, ready } = useTranslation();
+  const { i18n } = useTranslation();
 
   const handleClickOutside = (event) => {
     if (calendarRef.current && !calendarRef.current.contains(event.target)) {
@@ -44,12 +23,17 @@ function CalendarComponent({ dates, setDates }) {
 
   function translateDate(dateString) {
     let translated = dateString;
-    Object.keys(days).forEach(eng => {
-        translated = translated.replace(eng, days[eng]);
+
+    // Переклад днів
+    ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].forEach(day => {
+        translated = translated.replace(day, t(`calendar.${day}`));
     });
-    Object.keys(months).forEach(eng => {
-        translated = translated.replace(eng, months[eng]);
+
+    // Переклад місяців
+    ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].forEach(month => {
+        translated = translated.replace(month, t(`calendar.${month}`));
     });
+
     return translated;
   }
   
@@ -117,6 +101,8 @@ function CalendarComponent({ dates, setDates }) {
     }
   };
 
+  if (!ready) return null;
+
   return (
     <div className="dropdown-calendar" ref={calendarRef}>
         <button className="calendar-button" id='show-calendar' onClick={handleClick}>
@@ -126,7 +112,7 @@ function CalendarComponent({ dates, setDates }) {
               .toString()
               .substring(0,3))}, ${dates.checkIn.split('-')[2]} ${translateDate(new Date(dates.checkIn)
               .toString()
-              .substring(4,7))}` : "Дата заезда"}
+              .substring(4,7))}` : `${t('calendar.checkInDate')}`}
 
           {" - "}
 
@@ -134,7 +120,7 @@ function CalendarComponent({ dates, setDates }) {
               .toString()
               .substring(0,3))}, ${dates.checkOut.split('-')[2]} ${translateDate(new Date(dates.checkOut)
               .toString()
-              .substring(4,7))}` : "Дата отъезда"}
+              .substring(4,7))}` : `${t('calendar.checkOutDate')}`}
         </button>
         <div className='calendar-component'>
           <Calendar
@@ -150,6 +136,7 @@ function CalendarComponent({ dates, setDates }) {
           tileDisabled={({ date }) => date < new Date().setHours(0, 0, 0, 0)} // Делаем даты серыми
           showNeighboringMonth={false} // Убирает дни соседних месяцев
           activeStartDate={activeStartDate}
+          locale={i18n.language === 'ua' ? 'uk' : i18n.language}//Выставляет язык календаря на выбранный в хэдере
           onActiveStartDateChange={handleActiveStartDateChange}
           prevLabel={<button onClick={handlePrevMonth}>{"<"}</button>}
           nextLabel={<button onClick={handleNextMonth}>{">"}</button>}
@@ -166,6 +153,7 @@ function CalendarComponent({ dates, setDates }) {
           tileDisabled={({ date }) => date < new Date().setHours(0, 0, 0, 0)} // Делаем даты серыми
           showNeighboringMonth={false} // Убирает дни соседних месяцев
           activeStartDate={activeStartDate}
+          locale={i18n.language === 'ua' ? 'uk' : i18n.language}//Выставляет язык календаря на выбранный в хэдере
           onActiveStartDateChange={handleActiveStartDateChange}
           prevLabel={<button onClick={handlePrevMonth}>{"<"}</button>}
           nextLabel={<button onClick={handleNextMonth}>{">"}</button>}

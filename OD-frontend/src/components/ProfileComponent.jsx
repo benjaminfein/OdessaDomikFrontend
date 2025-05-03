@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { getUser } from '../services/UserService';
+import { useTranslation } from 'react-i18next';
 
 const ProfileComponent = () => {
   const [profileData, setProfileData] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const { t, ready } = useTranslation();
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -20,23 +22,25 @@ const ProfileComponent = () => {
   }, []);
 
   if (errorMessage) {
-    return <div>{errorMessage}</div>;
+    return <div>{t('profile.errorMessage')}</div>;
   }
 
   if (!profileData) {
-    return <div>Загрузка...</div>;
+    return <div>{t('reservationComponent.loading')}</div>;
   }
 
   const { name, username, email, phoneNumber, dateOfCreated } = profileData;
 
+  if (!ready) return null;
+
   return (
     <div className="my-page">
-      <h2>Персональные данные</h2>
-      <p className='profile-point'><strong>Имя:</strong> {name || "Не указано"}</p>
-      <p><strong>Имя пользователя:</strong> {username || "Не указано"}</p>
-      <p><strong>Email:</strong> {email || "Не указано"}</p>
-      <p><strong>Номер телефона:</strong> {phoneNumber || "Не указано"}</p>
-      <p><strong>Дата создания профиля:</strong> {new Date(dateOfCreated).toLocaleString() || "Не указано"}</p>
+      <h2>{t('profile.personalData')}</h2>
+      <p className='profile-point'><strong>{t('profile.name')}:</strong> {name || t('profile.notSpecified')}</p>
+      <p><strong>{t('profile.username')}:</strong> {username || t('profile.notSpecified')}</p>
+      <p><strong>Email:</strong> {email || t('profile.notSpecified')}</p>
+      <p><strong>{t('profile.phoneNumber')}:</strong> {phoneNumber || t('profile.notSpecified')}</p>
+      <p><strong>{t('profile.createdAt')}:</strong> {dateOfCreated ? new Date(dateOfCreated).toLocaleString() : t('profile.notSpecified')}</p>
     </div>
   );
 };

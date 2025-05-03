@@ -43,7 +43,7 @@ const RegisterComponent = () => {
             await registration(username, email, name, phoneNumber, password);
     
             // После успешной регистрации перенаправляем пользователя на страницу логина
-            navigate("/apartments");
+            navigate(`/${i18n.language}/apartments`);
         } catch (error) {
             if (error.response) {
                 const errorData = error.response.data;
@@ -68,79 +68,76 @@ const RegisterComponent = () => {
     return (
         <>
             <HeaderRegisterLoginComponent />
-            <div className="my-page" style={{marginTop: "95px", justifyContent: "center"}}>
+            <div className="my-page">
                 <div className="register-form">
-                    <div className="row justify-content-center">
-                        <div className="col-md-6">
-                            <h2 className="text-center fw-bold mb-4">Создайте аккаунт</h2>
-                            <p className="text-center text-muted mb-4">
-                                Зарегистрируйтесь, чтобы получить доступ ко всем нашим сервисам.
-                            </p>
-                            {errorMessage && <div className="alert alert-danger text-center">{errorMessage}</div>}
-                            <form className="p-4 border rounded shadow-sm" onSubmit={registerUser}>
-                                <div className="mb-3">
-                                    <label htmlFor="username" className="form-label fw-bold">Имя пользователя</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="username"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="email" className="form-label fw-bold">Адрес электронной почты</label>
-                                    <input
-                                        type="email"
-                                        className="form-control"
-                                        id="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="name" className="form-label fw-bold">Ваше имя</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="name"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="phoneNumber" className="form-label fw-bold">Номер телефона</label>
-                                    <input
-                                        type="tel"
-                                        className="form-control"
-                                        id="phoneNumber"
-                                        value={phoneNumber}
-                                        onChange={(e) => setPhoneNumber(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-4">
-                                    <label htmlFor="password" className="form-label fw-bold">Пароль</label>
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        id="password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <button type="submit" className="btn btn-primary w-100 fw-bold" disabled={isLoading}>
-                                    {isLoading ? 'Загрузка...' : 'Зарегистрироваться'}
-                                </button>
-                            </form>
-                            <p className="text-center mt-4 text-muted">
-                                Все права защищены.
-                            </p>
+                    <div className="form-wrapper">
+                        <h2 className="form-title">Создайте аккаунт</h2>
+                        <p className="form-subtitle">Зарегистрируйтесь, чтобы получить доступ ко всем нашим сервисам.</p>
+
+                        {errorMessage && <div className="form-error">{errorMessage}</div>}
+
+                        <form className="form-body" onSubmit={registerUser}>
+                        <div className="form-group">
+                            <label htmlFor="username">Имя пользователя</label>
+                            <input
+                            type="text"
+                            id="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                            className="form-input"
+                            />
                         </div>
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input
+                            type="email"
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            className="form-input"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="name">Ваше имя</label>
+                            <input
+                            type="text"
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                            className="form-input"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="phoneNumber">Номер телефона</label>
+                            <input
+                            type="tel"
+                            id="phoneNumber"
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            required
+                            className="form-input"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="password">Пароль</label>
+                            <input
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            className="form-input"
+                            />
+                        </div>
+                        <button type="submit" className="form-button" disabled={isLoading}>
+                            {isLoading ? 'Загрузка...' : 'Зарегистрироваться'}
+                        </button>
+                        </form>
+
+                        <p className="form-footer">Все права защищены.</p>
                     </div>
                 </div>
             </div>

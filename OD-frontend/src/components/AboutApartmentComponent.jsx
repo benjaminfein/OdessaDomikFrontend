@@ -1,73 +1,104 @@
 import React, {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom';
 import { getApartment } from '../services/ApartmentService'
-import '../App.css'
 import MapComponent from './MapComponent';
-
+import { getApartmentPhotos } from '../services/S3Service';
+import '../App.css'
 
 const AboutApartmentComponent = () => {
+    const { id } = useParams();
+    const [apartment, setApartment] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [currentImage, setCurrentImage] = useState(0);
+    const [images, setImages] = useState([]);
+    const [touchStartX, setTouchStartX] = useState(null);
+    const [touchEndX, setTouchEndX] = useState(null);
+    const minSwipeDistance = 50;
+    const isVideo = (url) => {
+        return url.match(/\.(mp4|webm|ogg|mov|avi|mkv|flv|wmv)$/i);
+    };
+    const handlePrev = () => {
+        setCurrentImage(prev => prev === 0 ? images.length - 1 : prev - 1);
+    };
+    const handleNext = () => {
+        setCurrentImage(prev => prev === images.length - 1 ? 0 : prev + 1);
+    };
+    const handleTouchStart = (e) => {
+        setTouchStartX(e.touches[0].clientX);
+    };
+    const handleTouchMove = (e) => {
+        setTouchEndX(e.touches[0].clientX);
+    };
 
-    const { id } = useParams(); // Получаем ID из URL
-    const [apartment, setApartment] = useState(null); // Храним данные о квартире
-    const [loading, setLoading] = useState(true); // Для отображения состояния загрузки
+    const handleTouchEnd = () => {
+        if (!touchStartX || !touchEndX) return;
+    
+        const distance = touchStartX - touchEndX;
+        if (distance > minSwipeDistance) {
+            // свайп влево
+            if (currentImage < images.length - 1) {
+                setCurrentImage(currentImage + 1);
+            }
+        } else if (distance < -minSwipeDistance) {
+            // свайп вправо
+            if (currentImage > 0) {
+                setCurrentImage(currentImage - 1);
+            }
+        }
+    
+        // сброс
+        setTouchStartX(null);
+        setTouchEndX(null);
+    };
 
     const isParkingLotThereOrNot = (value) => {
-        return value ? <div className="col"><div className="card card-designations">
-        <div className="about-card-body card-body">
-            <div className="container-images-icons">
-                <img src="https://www.svgrepo.com/show/487658/parking.svg" className="small-images-designations"></img>
+        return value ? (
+            <div className="designation-card">
+                <img src="https://www.svgrepo.com/show/487658/parking.svg" alt="Парковка" />
+                <p>Парковочное место</p>
             </div>
-            <div className="parking-and-wifi-container-text-about">
-                <h6 className="text-designation card-subtitle text-body-secondary">Парковочное место</h6>
-            </div>
-        </div>
-    </div></div> : <div className="empty-div"></div>;
+        ) : <div className="empty-div"></div>;
     };
 
     const isWiFiThereOrNot = (value) => {
-        return value ? <div className="col"><div className="card card-designations">
-        <div className="about-card-body card-body">
-            <div className="container-images-icons">
-                <img src="https://www.svgrepo.com/show/532893/wifi.svg" className="small-images-designations"></img>
+        return value ? (
+            <div className="designation-card">
+                <img src="https://www.svgrepo.com/show/532893/wifi.svg" alt="Парковка" />
+                <p>Бесплатный WiFi</p>
             </div>
-            <div className="parking-and-wifi-container-text-about">
-                <h6 className="text-designation card-subtitle text-body-secondary">Бесплатный WiFi</h6>
-            </div>
-        </div>
-    </div></div> : <div className="empty-div"></div>;
+        ) : <div className="empty-div"></div>;
     };
 
     const isSeaViewThereOrNot = (value) => {
-        return value ? <div className="col"><div className="card card-designations">
-        <div className="about-card-body card-body">
-            <div className="container-images-icons">
-                <img src="https://www.svgrepo.com/show/246158/sea.svg" className="small-images-designations"></img>
+        return value ? (
+            <div className="designation-card">
+                <img src="https://www.svgrepo.com/show/246158/sea.svg" alt="Парковка" />
+                <p>Вид на море</p>
             </div>
-            <div className="container-text-about">
-                <h6 className="text-designation card-subtitle text-body-secondary">Вид на море</h6>
-            </div>
-        </div>
-    </div></div> : <div className="empty-div"></div>;
+        ) : <div className="empty-div"></div>;
     };
 
     useEffect(() => {
         const fetchApartment = async () => {
             try {
-                setLoading(true); // Устанавливаем состояние загрузки
-                const response = await getApartment(id); // Ожидаем выполнения запроса
-                setApartment(response.data); // Сохраняем данные в state
+                setLoading(true);
+                const response = await getApartment(id);
+                setApartment(response.data);
+    
+                const photos = await getApartmentPhotos(id);
+                setImages(photos);
             } catch (error) {
                 console.error("Ошибка при загрузке данных:", error);
             } finally {
-                setLoading(false); // Выключаем состояние загрузки
+                setLoading(false);
             }
         };
-
+    
         fetchApartment();
     }, [id]);
 
     if (loading) {
-        return <h4>Загрузка...</h4>; // Отображаем, пока данные загружаются
+        return <h4>Загрузка...</h4>;
     }
 
   return (
@@ -76,79 +107,85 @@ const AboutApartmentComponent = () => {
         <p className='about-apartment-address'>{apartment.address}</p>
         <div className='my-container'>
             <div className="about-first-section">
-                <div id="carouselExampleIndicators" className="carousel slide">
-                <div className="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                </div>
-                <div className="carousel-inner">
-                    <div className="carousel-item active">
-                    <img src="https://live.staticflickr.com/65535/54186708396_2c1315a661_k.jpg" className="d-block w-100" alt="..." />
+                <div className="about-first-section-container">
+                    <div
+                        className="photo-carousel"
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                    >
+                        <div
+                            className="photo-carousel-track"
+                            style={{ transform: `translateX(-${currentImage * 100}%)` }}
+                        >
+                            {images.length > 0 ? images.map((media, index) => (
+                                <div className="photo-carousel-slide" key={index}>
+                                    {isVideo(media) ? (
+                                        <video controls>
+                                            <source src={media} type="video/mp4" />
+                                            Ваш браузер не поддерживает видео.
+                                        </video>
+                                    ) : (
+                                        <img src={media} alt={`Slide ${index}`} />
+                                    )}
+                                </div>
+                            )) : (
+                                <div className="photo-carousel-slide">
+                                    <img src="https://via.placeholder.com/800x500?text=Нет+фото" alt="Заглушка" />
+                                </div>
+                            )}
+                        </div>
+
+                        <button className="photo-carousel-control photo-prev" onClick={handlePrev}>&#10094;</button>
+                        <button className="photo-carousel-control photo-next" onClick={handleNext}>&#10095;</button>
+
+                        <div className="photo-carousel-indicators">
+                            {images.map((_, index) => (
+                                <div
+                                    key={index}
+                                    className={`photo-indicator-bar ${index === currentImage ? 'active' : ''}`}
+                                    onClick={() => setCurrentImage(index)}
+                                />
+                            ))}
+                        </div>
+
+                        <div className="photo-carousel-counter">
+                            {currentImage + 1}/{images.length}
+                        </div>
                     </div>
-                    <div className="carousel-item">
-                    <img src="https://live.staticflickr.com/65535/54185825672_9ebdd26457_k.jpg" className="d-block w-100" alt="..." />
-                    </div>
-                    <div className="carousel-item">
-                    <img src="https://live.staticflickr.com/65535/54186708461_82f2c5f6f3_k.jpg" className="d-block w-100" alt="..." />
-                    </div>
-                </div>
-                <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span className="visually-hidden">Previous</span>
-                </button>
-                <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span className="visually-hidden">Next</span>
-                </button>
-                </div>
-                <div className='short-description-and-map'>
+
+                    <div className="short-description-and-map">
                         <div className='about-apartment-short-description'>{apartment.shortDescription}</div>
                         <MapComponent />
+                    </div>
                 </div>
             </div>
             <div className="cards-designations">
                 {isParkingLotThereOrNot(apartment.hasParkingLot)}
                 {isWiFiThereOrNot(apartment.hasWiFi)}
-                <div className="col">
-                    <div className="card card-designations">
-                        <div className="about-card-body card-body">
-                            <div className="container-images-icons">
-                                <img src="https://www.svgrepo.com/show/473067/building.svg" className="small-images-designations"></img>
-                            </div>
-                            <div className="container-text-about">
-                                <h6 className="text-designation card-subtitle text-body-secondary">Номер этажа: {apartment.floorNumber}</h6>
-                            </div>
-                        </div>
-                    </div>
+                
+                <div className="designation-card">
+                    <img src="https://www.svgrepo.com/show/473067/building.svg" alt="Этаж" />
+                    <p>Номер этажа: {apartment.floorNumber}</p>
                 </div>
-                <div className="col">
-                    <div className="card card-designations">
-                        <div className="about-card-body card-body">
-                            <div className="container-images-icons">
-                                <img src="https://www.svgrepo.com/show/501713/ruler.svg" className="small-images-designations"></img>
-                            </div>
-                            <div className="container-text-about">
-                                <h6 className="text-designation card-subtitle text-body-secondary">Площадь квартиры: {apartment.areaOfApartment} м²</h6>
-                            </div>
-                        </div>
-                    </div>
+
+                <div className="designation-card">
+                    <img src="https://www.svgrepo.com/show/501713/ruler.svg" alt="Площадь" />
+                    <p>Площадь квартиры: {apartment.areaOfApartment} м²</p>
                 </div>
+
                 {isSeaViewThereOrNot(apartment.hasSeaView)}
-                <div className="col">
-                    <div className="card card-designations">
-                        <div className="about-card-body card-body">
-                            <div className="container-images-icons">
-                                <img src="https://www.svgrepo.com/show/490555/bed-double.svg" className="small-images-designations"></img>
-                            </div>
-                            <div className="container-text-about">
-                                <h6 className="text-designation card-subtitle text-body-secondary">Количество спальных мест: {apartment.countOfSleepPlaces}</h6>
-                            </div>
-                        </div>
-                    </div>
+
+                <div className="designation-card">
+                    <img src="https://www.svgrepo.com/show/490555/bed-double.svg" alt="Спальные места" />
+                    <p>Количество спальных мест: {apartment.countOfSleepPlaces}</p>
                 </div>
             </div>
-            <div className="about-description">{apartment.description}</div>
+            <div className="about-description">
+                <div className="about-description-container">
+                    {apartment.description}
+                </div>
+            </div>
         </div>
     </div>
   )

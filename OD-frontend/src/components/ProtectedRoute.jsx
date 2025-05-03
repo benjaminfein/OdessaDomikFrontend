@@ -1,7 +1,8 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useContext } from 'react';
-import { AuthContext } from '../AuthContext'; // Путь к твоему AuthContext
+import { AuthContext } from '../AuthContext';
+import i18n from '../i18n';
 
 const ProtectedRoute = ({ children, requiredRole }) => {
   const { user, loading } = useContext(AuthContext);
@@ -10,7 +11,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
   if (loading) return <div>Loading...</div>;
 
   // Если пользователь не авторизован, перенаправляем на страницу входа
-  if (!user) return <Navigate to="/login" />;
+  if (!user) return <Navigate to={`/${i18n.language}/login`} />;
 
   // Если есть проверка роли и роль пользователя не совпадает — доступ запрещён
   if (requiredRole && user.User.role !== requiredRole) return <Navigate to="/" />;

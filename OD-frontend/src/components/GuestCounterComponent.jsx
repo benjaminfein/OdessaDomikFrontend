@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../../node_modules/react-calendar/src/Calendar.css';
 import Cookies from 'js-cookie';
+import { useTranslation } from 'react-i18next';
 
 function GuestCounterComponent({ guestCount, setGuestCount, maxGuests }) { // <-- Получаем из MainComponent
     const guestRef = useRef(null);
+    const { t, ready } = useTranslation();
 
     const handleClickOutside = (event) => {
         if (guestRef.current && !guestRef.current.contains(event.target)) {
@@ -50,17 +52,19 @@ function GuestCounterComponent({ guestCount, setGuestCount, maxGuests }) { // <-
         }
     };
 
+    if (!ready) return null;
+
     return (
         <div className="dropdown-guests-count" ref={guestRef}>
             <button className="counter-button" id='show-calendar' onClick={handleClick}>
                 <img className='main-search-images' src="https://www.svgrepo.com/show/440005/person.svg" />
-                {guestCount} гостей
+                {guestCount} {t('guestCounter.guests')}
                 <img className="dropdown-chevron" src="https://www.svgrepo.com/show/513816/chevron-down.svg" />
             </button>
             <div className='guest-counter-component'>
                 <div className='counter-line'>
                     <p className='counter-line-text'>
-                        Количество гостей
+                        {t('guestCounter.amountOfGuests')}
                     </p>
                     <div className='dec-inc-counter'>
                         {console.log("maxGuests: " + maxGuests)}
@@ -72,7 +76,7 @@ function GuestCounterComponent({ guestCount, setGuestCount, maxGuests }) { // <-
                 <button className="confirm-btn" onClick={() => {
                     Cookies.set('guestCount', guestCount, { expires: 1 / 96 }); // 15 минут
                     onChange(guestCount);
-                }}>Готово</button>
+                }}>{t('guestCounter.ready')}</button>
             </div>
         </div>
     );

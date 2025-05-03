@@ -3,7 +3,7 @@ import { listApartments } from '../services/ApartmentService';
 import '../App.css';
 import ScrollToTopButtonComponent from './ScrollToTopButtonComponent';
 
-const ListApartmentsComponent = () => {
+const ListApartmentsComponentClient = () => {
     const [apartments, setApartments] = useState([]);
     const [originalApartments, setOriginalApartments] = useState([]); // Оригинальный массив данных
     const [sortOption, setSortOption] = useState('old'); // Начальное состояние сортировки
@@ -128,7 +128,7 @@ const ListApartmentsComponent = () => {
                                 <p className="apartment-text">{apartment.shortDescription}</p>
                                 <h4 className="apartment-price">{apartment.price} грн</h4>
                             </div>
-                            <a href={`http://localhost:3000/apartments/${apartment.id}/about`} className="apartment-btn">
+                            <a href={`/${i18n.language}/apartments/${apartment.id}/about`} className="apartment-btn">
                                     Подробнее
                             </a>
                         </div>
@@ -140,4 +140,4 @@ const ListApartmentsComponent = () => {
     );
 };
 
-export default ListApartmentsComponent;
+export default ListApartmentsComponentClient;

@@ -19,50 +19,71 @@
         height: 0;
         width: 0;
     }
+    
     html, body{
         margin: 0;
         padding: 0;
         min-height: 100vh;
         height: 100%;
     }
+
     .wrapper{
         display: flex;
         flex-direction: column;
         min-height: 100vh;
     }
-    .my-footer {
-        padding-top: 50px;
-        bottom: 0;
-        width: 100%;
-        height: 150px;
-        background-color: var(--footer-color);
-        text-align: center;
-        color: black;
-        font-family: "Nunito", sans-serif;
-    }
 
     .logo {
         font-size: clamp(1rem, 2vw, 2rem);
-        font-family: "Inknut Antiqua", serif;
         color: white;
-        background-color: #bbae3c;
-        text-align: center;
+        text-align: start;
         padding: 10px 15px;
         border-radius: 7px;
+        width: auto;
+        display: flex;
+        justify-content: space-between;
         user-select: none;
         text-decoration: none;
     }
 
-    .under-logo-sign {
-        font-size: clamp(0.8rem, 1.6vw, 2.1rem);
+    .logo a {
         margin: 0;
+        text-decoration: none;
+        color: white;
+        font-family: "Inknut Antiqua", serif;
+    }
+
+    .language-selector select {
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid #666;
+        color: white;
+        background-color: transparent;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .language-selector select option {
+        color: black;
+    }
+
+    .language-selector select:hover {
+        border-color: #ccc;
+    }
+
+    .under-logo-sign {
+        font-size: clamp(2rem, 2.5vw, 3rem);
+        margin: 0;
+        color: white;
+        padding: 40px 15px;
     }
 
     .navigation {
-        width: 50%;
+        width: 100%;
         display: flex;
-        justify-content: flex-end;
-        align-items: center;
+        justify-content: flex-start;
+        align-items: flex-start;
         gap: 20px;
     }
 
@@ -70,9 +91,9 @@
         display: flex;
         cursor: pointer;
         position: relative;
-        font-size: clamp(0.4rem, 1vw, 1.2rem);
+        font-size: clamp(1.2rem, 1.6vw, 1.9rem);
         font-family: var(--fonts-lora);
-        color: #fff;
+        color: white;
         font-weight: 600;
         text-decoration: none;
         transition: .5s;
@@ -97,7 +118,6 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: #bbae3c;
         border-radius: 30px;
         z-index: -1;
         transform: scale(1);
@@ -185,7 +205,6 @@
         transition: 0.3s;
     }
     
-    /* Мобильное меню (изначально скрыто) */
     .mobile-nav {
         display: none;
         flex-direction: column;
@@ -209,21 +228,22 @@
         transform: rotate(180deg);
     }
 
-    .fixed-header {
+    .main-header {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
+        height: 55vh;
         display: flex;
         padding: 30px 0;
         justify-content: center;
-        align-items: center;
+        /* align-items: center; */
         z-index: 100;
         font-family: "Nunito", sans-serif;
+        background-color: #666;
     }
 
-    .absolute-header {
-        position: absolute;
+    .client-header {
         top: 0;
         left: 0;
         width: 100%;
@@ -232,13 +252,44 @@
         justify-content: center;
         align-items: center;
         z-index: 100;
-        background-color: lightgrey;
+        background-color: rgb(102, 102, 102);
+        font-family: "Nunito", sans-serif;
+    }
+
+    .client-header .header-container .navigation {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        padding-top: 35px;
+        z-index: 9999;
+        width: max-content; /* Только по ширине контента */
+        background: transparent; /* Или нужный цвет, если нужно */
+        pointer-events: auto; /* На всякий случай */
+    }
+
+    .client-header .header-container .under-logo-sign {
+        padding: 0 15px;
+    }
+
+    .admin-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 30px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        background-color: rgb(102, 102, 102);
         font-family: "Nunito", sans-serif;
     }
 
     .header-container {
         width: 90%;
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
     }
 
@@ -254,14 +305,9 @@
         position: relative;
         display: flex;
         justify-content: center;
-        align-items: center;
-        height: 100vh;
+        align-items: flex-end;
+        height: 55vh;
         width: 100%;
-        /* background: url('https://live.staticflickr.com/65535/54391048030_54cdf88ba4_b.jpg') no-repeat; */
-        background: url('https://live.staticflickr.com/65535/54281842191_0e81b7de97_k.jpg') no-repeat;
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
     }
     
     .parallax::before {
@@ -283,7 +329,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        overflow: hidden;
         flex-direction: row;
         gap: 20px;
         width: 800px;
@@ -293,11 +338,15 @@
         padding: 0 20px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
         transition: .5s ease-in-out .5s;
+        overflow: visible;
+        position: relative;
+        transform: translateY(50%); /* ВЫСТУП НАПОЛОВИНУ */
+        z-index: 101;
     }
 
     .search-button {
         font-size: 20px;
-        background-color: var(--slava-color);
+        background-color: #494949;
         color: #fff;
         cursor: pointer;
         border-radius: 5px;
@@ -321,7 +370,7 @@
     }
 
     .dropdown-calendar:hover {
-        box-shadow: 1px 1px 8px rgb(0, 40, 77);
+        box-shadow: 1px 1px 8px rgb(146, 146, 146);
     }
 
     .dropdown-calendar .calendar-button {
@@ -340,7 +389,7 @@
         transition: opacity .75s ease, visibility .75s ease;
 
         border-radius: 5px;
-        top: calc(53% + 20px);
+        top: calc(61% + 20px);
         position: absolute;
         z-index: 999;
         box-shadow: 1px 1px 15px black;
@@ -388,7 +437,7 @@
     }
 
     .dropdown-guests-count:hover {
-        box-shadow: 1px 1px 8px rgb(0, 40, 77);
+        box-shadow: 1px 1px 8px rgb(146, 146, 146);
     }
 
     .dropdown-guests-count img {
@@ -431,7 +480,7 @@
         min-height: 70px;
         padding: 20px 20px;
         gap: 30px;
-        top: calc(53% + 21px);
+        top: calc(61% + 21px);
         position: absolute;
         z-index: 999;
         box-shadow: 1px 1px 15px black;
@@ -472,7 +521,7 @@
 
     .confirm-btn {
         width: 100%;
-        background: #007bff;
+        background: #414141;
         color: white;
         border: none;
         padding: 10px;
@@ -488,54 +537,49 @@
     }
 
     .about-us-container {
-        gap: 300px;
+        width: 60%;
         display: flex;
-        flex-direction: column;
-    }
-
-    .about-natalia {
-        display: flex;
-        background-color: lightgrey;
-        box-shadow: 0px -9px 15px -3px rgba(211, 211, 211, 0.2);
-        padding: 50px 100px;
-        z-index: 1000;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .about-natalia-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .about-natalia-title {
-        margin-bottom: 20px;
-    }
-
-    .about-natalia-img{
-        border-radius: 10px;
-    }
-
-    .about-natalia-text {
-        font-size: 28px;
-    }
-
-    .about-more-button {
-        background-color: #bbae3c;
-        width: 35%;
-        height: 40px;
-        text-decoration: none;
-        color: white;
-        display: flex;
-        justify-content: center;
         align-items: center;
-        border-radius: 7px;
-        transition: .5s;
+        justify-content: center;
+        flex-direction: column;
+        margin-bottom: 60px;
     }
 
-    .about-more-button:hover {
-        background-color: black;
+    .about-us-contacts {
+        gap: 20px;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        margin: 40px 0;
+    }
+
+    .about-us-contacts a {
+        gap: 5px;
+        text-decoration: none;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .about-us-img {
+        width: 30px;
+    }
+
+    .about-us-explanation {
+        font-weight: 600;
+        padding-top: 5px;
+        color: #000000;
+    }
+
+    .about-us-text {
+        font-size: 18px;
+    }
+
+    .scrollable-td {
+        max-height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 4px;
+        word-wrap: break-word;
     }
 
     *,
@@ -545,7 +589,7 @@
     }
 
     .my-page {
-        margin-top: 210px;
+        margin-top: 50px;
         flex: 1;
         overflow: hidden;
         background-color: white;
@@ -605,14 +649,236 @@
     }
 
     .container>.row {
-        margin-left: 0; /* Замени 120px на 0 */
-        margin-right: auto; /* Убери или замени */
+        display: flex;
+        justify-content: space-between;
     }
     
     .container-buttons {
         display: flex;
         justify-content: space-around;
     }
+
+    .admin-page {
+        display: flex;
+        gap: 40px;
+        justify-content: center;
+        align-items: flex-start;
+    }
+      
+    .photo-manager {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 1000px;
+        padding: 100px 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+      
+    .photo-header {
+        font-weight: bold;
+        text-align: right;
+        margin-bottom: 10px;
+        font-size: 30px;
+    }
+      
+    .selected-counter {
+        color: red;
+        
+    }
+      
+    .photo-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+      
+    .photo-item {
+        position: relative;
+        cursor: pointer;
+        border-radius: 5px;
+        overflow: hidden;
+        border: 2px solid transparent;
+        transition: 0.3s ease;
+    }
+      
+    .photo-item.selected {
+        border: 4px solid red;
+    }
+      
+    .photo-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .photo-item video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+      
+    .photo-checkmark {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        background-color: rgba(255, 0, 0, 0.7);
+        border-radius: 50%;
+        color: white;
+        padding: 3px 12px;
+        font-size: 25px;
+    }
+      
+    .photo-toolbar {
+        margin-top: 10px;
+        text-align: right;
+    }
+      
+    .delete-button {
+        background: none;
+        border: none;
+        font-size: 42px;
+        color: white;
+        background-color: red;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: .3s;
+    }
+
+    .delete-button:hover {
+        color: red;
+        background-color: white;
+    }
+      
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+      
+    .modal-window {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+    }
+      
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .admin-form-wrapper {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+        text-align: center;
+        font-size: 22px;
+        margin-bottom: 30px;
+    }
+
+    .admin-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .form-field {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-field label {
+        font-weight: 500;
+        margin-bottom: 6px;
+    }
+
+    .form-field input,
+    .form-field textarea {
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 15px;
+        resize: vertical;
+    }
+
+    .form-toggle {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .form-toggle label {
+        font-size: 15px;
+    }
+
+    .submit-button {
+        margin-top: 20px;
+        padding: 12px;
+        background-color: #198754;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .submit-button:hover {
+        background-color: #157347;
+    }
+
+    .admin-textarea {
+        width: 100%;
+        min-height: 40px;
+        resize: none;
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        line-height: 1.5;
+        box-sizing: border-box;
+    }
+
+    .upload-panel {
+        width: 550px;
+        margin-left: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .upload-button, .confirm-upload-button {
+        margin-top: 10px;
+        padding: 8px 12px;
+        border: none;
+        background-color: #2e7d32;
+        color: white;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    
+      .upload-preview {
+        margin-top: 10px;
+        text-align: center;
+    }      
     
     .btn {
         color: #0D6EFD;
@@ -657,12 +923,12 @@
     }
 
     .apartment-title {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         margin-bottom: 10px;
     }
 
     .apartment-text {
-        font-size: 0.9rem;
+        font-size: 1.1rem;
         flex-grow: 1;
     }
 
@@ -676,7 +942,7 @@
     .apartment-btn {
         display: block;
         text-align: center;
-        background: #007bff;
+        background: #8f8f8f;
         color: white;
         text-decoration: none;
         cursor: pointer;
@@ -687,7 +953,7 @@
     }
 
     .apartment-btn:hover {
-        background: #0056b3;
+        background: #363636;
     }
 
     .about-apartment-name{
@@ -711,51 +977,150 @@
     }
 
     .about-first-section {
+        width: 100%;
         display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
-    .carousel {
-        flex: 1; /* Занимает больше места, чем описание */
-        position: absolute;
-        left: 0; /* Сдвигаем карусель к левому краю */
-        top: 0; /* Регулируем вертикальное положение */
-        width: 100%;
-        height: auto;
-        margin: 20px 20px 20px var(--margin-sides-for-all); /* Добавляем отступы по желанию */
+    .about-first-section-container {
+        width: 90%;
+        display: flex;
+        justify-content: space-between;
+        margin: 0 auto;
+        gap: 20px;
     }
-    .carousel-inner img{
-        max-height: 530px;
-        object-fit: cover;
+
+    /* Карусель для ПК версии */
+
+    .photo-carousel {
+        position: relative;
+        width: 50%;
+        height: 800px;
+        overflow: hidden;
+        border-radius: 5px;
+    }
+
+    .photo-carousel-track {
+        display: flex;
+        height: 100%;
+        transition: transform 0.6s ease;
+    }
+
+    .photo-carousel-control {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: transparent;
+        color: #fff;
+        border: none;
+        font-size: 3rem;
+        padding: 10px 15px;
+        cursor: pointer;
+        z-index: 2;
+        transition: 0.3s;
+    }
+
+    .photo-carousel-control.photo-prev {
+        left: 10px;
+    }
+    
+    .photo-carousel-control.photo-next {
+        right: 10px;
+    }
+    
+    .photo-carousel-control:hover {
+        color: #000000;
+    }
+
+    .photo-carousel-indicators {
+        position: absolute;
+        bottom: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+    }
+
+    .photo-indicator-bar {
+        width: 50px;
+        height: 4px;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 2px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        padding: 3px;
+        box-sizing: content-box;
+    }
+    
+    .photo-indicator-bar.active {
+        background-color: #fff;
+    }
+
+    .photo-carousel-counter {
+        position: absolute;
+        bottom: 2px;
+        right: 5px;
+        font-size: 12px;
+        background: rgba(0,0,0,0.5);
+        color: white;
+        padding: 2px 6px;
         border-radius: 4px;
     }
-    .carousel-indicators {
-        left: 0;
-        right: auto;
+
+    .photo-carousel-slide {
+        min-width: 100%;
+        height: 100%;
     }
 
+    .photo-carousel-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        border-radius: 5px;
+    }
+
+    .photo-carousel-slide video {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        border-radius: 5px;
+        background-color: #000000;
+        padding-bottom: 30px;
+        box-sizing: border-box;
+    }
+
+    .photo-carousel-slide video::-webkit-media-controls {
+        margin-bottom: 30px;
+    }
+
+    /*  */
+
     .short-description-and-map{
-        margin-right: var(--margin-sides-for-all);
-        flex: 1; /* Описание занимает меньше места */
+        width: 50%;
         display: flex;
-        flex-direction: column; /* Элементы располагаются вертикально */
-        align-items: center; /* Центрирование содержимого */
+        flex-direction: column;
+        padding-left: 200px;
+        gap: 50px;
     }
 
     .about-apartment-short-description{
-        margin: 20px 0 20px 100px;
-        width: 80%; /* Ширина для описания */
         text-align: left;
-        max-height: 200px;
+        font-size: 20px;
+        width: 70%;
     }
 
     .reservation-payment-content {
         display: flex;
         align-items: center;
+        gap: 50px;
     }
 
     .apartment-price {
-        margin: 0 40px 40px 0;
-        font-size: 28px;
+        margin: 0;
+        font-size: 38px;
     }
 
     .error-message-reservation {
@@ -770,7 +1135,7 @@
     }
 
     .reservation-button {
-        margin: 0 40px 40px 40px;
+        margin: 0;
         font-size: 20px;
         font-weight: 700;
         align-items: center;
@@ -930,51 +1295,49 @@
     }
 
     #map{
-        margin: 20px 0 20px 100px;
         height: 300px;
         width: 80%;
-        text-align: left;
+        align-items: flex-start;
         border-radius: 4px;
     }
 
     .cards-designations {
-        display: flex; /* Карточки располагаются в одну строку */
+        display: flex;
         flex-wrap: wrap;
-        justify-content: flex-start;
-        gap: 16px;
+        justify-content: center;
+        gap: 20px;
+        margin: 30px 0;
         width: 50%;
     }
 
-    .col {
-        max-width: 300px;
-        min-width: 0;
-    }
-
-    .card-designations {
-        display: flex; /* Иконка и текст в строку */
-        align-items: center; /* Вертикальное выравнивание */
-        gap: 8px; /* Расстояние между иконкой и текстом */
-        padding: 8px 12px; /* Внутренние отступы */
-        border: 1px solid #ddd; /* Лёгкая рамка */
-        border-radius: 8px; /* Скруглённые углы */
-        background-color: rgb(255, 253, 250); /* Бежевый фон */
-        flex: 1 1 auto; /* Подстраивается под текст */
-        min-width: 120px; /* Минимальная ширина */
-    }
-
-    .about-card-body {
-        justify-content: center;
-        align-items: center;
+    .designation-card {
         display: flex;
-        flex-direction: row;
-        flex-wrap: wrap; /* если не стоит */
-        gap: 10px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        transition: transform 0.3s;
     }
 
-    .small-images-designations {
-        width: 28px; /* Размер иконки */
-        height: 28px;
-        margin-right: 3px;
+    .designation-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .designation-card img {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 10px;
+    }
+    
+    .designation-card p {
+        text-align: center;
+        font-weight: 600;
+        font-size: 17px;
     }
 
     .container-text-about {
@@ -996,7 +1359,16 @@
     }
 
     .about-description {
-        margin: 20px var(--margin-sides-for-all);
+        margin: 20px 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .about-description-container {
+        width: 90%;
+        font-size: 20px;
     }
 
     .login-form{
@@ -1004,9 +1376,100 @@
     }
 
     .register-form {
+        display: flex;
         justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+    }
+
+    .login-form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
     }
     
+    .form-wrapper {
+        max-width: 500px;
+        width: 100%;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+        font-size: 28px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .form-subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 25px;
+    }
+
+    .form-error {
+        background-color: #ffd6d6;
+        color: #a00;
+        padding: 12px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .form-body {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .form-input {
+        padding: 10px 14px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    .form-button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 12px;
+        font-weight: bold;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .form-button:disabled {
+        background-color: #5a92d6;
+        cursor: not-allowed;
+    }
+
+    .form-button:hover:not(:disabled) {
+        background-color: #0066cc;
+    }
+
+    .form-footer {
+        margin-top: 20px;
+        text-align: center;
+        color: #888;
+        font-size: 14px;
+    }
 
     .btn-primary {
         background-color: #007bff;
@@ -1066,21 +1529,19 @@
         background-color: rgb(248, 164, 164) !important;
     }
 
-    /* Overlay для замыливания фона */
     .overlay {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.5); /* Черный полупрозрачный фон */
+        background: rgba(0, 0, 0, 0.5);
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 9999; /* Чтобы перекрыть все остальные элементы */
+        z-index: 9999;
     }
     
-    /* Контейнер для лоадера и текста */
     .loader-container {
         background: white;
         padding: 20px;
@@ -1091,7 +1552,6 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
-    /* Кружок-лоадер */
     .loader {
         border: 4px solid #f3f3f3;
         border-top: 4px solid #3498db;
@@ -1101,7 +1561,6 @@
         animation: spin 1s linear infinite;
     }
     
-    /* Текст загрузки */
     .loading-text {
         margin-top: 10px;
         font-size: 16px;
@@ -1109,7 +1568,16 @@
         color: #333;
     }
     
-    /* Анимация вращения для лоадера */
+    .spinner {
+        margin: 15px auto;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #007bff;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        animation: spin 0.8s linear infinite;
+    }
+
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
@@ -1121,7 +1589,7 @@
         right: 20px;
         width: 50px;
         height: 50px;
-        background-color: #bbae3c;
+        background-color: black;
         color: white;
         font-size: 24px;
         font-weight: bold;
@@ -1146,9 +1614,396 @@
     .calendar-phones {
         display: none;
     }
+
+    .my-footer {
+        background-color: #333;
+        color: white;
+        padding: 40px 20px 20px;
+        font-family: "Nunito", sans-serif;
+        margin-top: auto;
+    }
+
+    .footer-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .footer-section {
+        flex: 1 1 200px;
+        gap: 10px;
+    }
+
+    .footer-section h4,
+    .footer-section h3 {
+        margin-bottom: 10px;
+    }
+
+    .footer-section ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .footer-section ul li {
+        margin-bottom: 6px;
+    }
+
+    .footer-section a {
+        color: #ccc;
+        text-decoration: none;
+    }
+
+    .footer-section a:hover {
+        color: white;
+    }
+
+    .footer-bottom {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 14px;
+        color: #aaa;
+    }
+
+    .insta-icon {
+        width: 24px;
+        height: 24px;
+        background-color: white;
+    }
+
+    .carousel-container {
+        position: relative;
+        width: 90%;
+        overflow: hidden;
+        margin: 80px auto 80px auto;
+    }
+    
+    .carousel-wrapper {
+        overflow: hidden;
+        width: 100%;
+    }
+    
+    .carousel-track {
+        display: flex;
+        transition: transform 0.6s ease;
+        height: 100%;
+    }
+
+    .carousel-track .apartment-card .apartment-body .apartment-price {
+        margin: 0;
+    }
+    
+    .apartment-card {
+        flex: 0 0 250px;  /* Минимальная ширина карточки */
+        margin: 0 10px;
+        box-sizing: border-box;
+    }
+    
+    /* Кнопки */
+    .carousel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0,0,0,0.5);
+        color: white;
+        border: none;
+        font-size: 2rem;
+        padding: 10px;
+        cursor: pointer;
+        z-index: 10;
+        border-radius: 50%;
+    }
+    
+    .carousel-btn.left {
+        left: 10px;
+    }
+    
+    .carousel-btn.right {
+        right: 10px;
+    }
+    
+    .carousel-btn:disabled {
+        opacity: 0.3;
+        cursor: default;
+    }
+
+    .thumbnail-gallery {
+        display: none;
+    }
+
+    .logo-sign {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 1023px) {
+    body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    .my-container {
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto; /* Центровка на странице */
+    }
+
+    .about-first-section {
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .about-first-section-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Стили для карусели фотографий */
+
+    .photo-carousel {
+        width: 100vw;
+        height: 40vh;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .photo-carousel-track {
+        display: flex;
+        height: 100%;
+        transition: transform 0.6s ease;
+    }
+    
+    .photo-carousel-slide {
+        flex: 0 0 100%;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .photo-carousel-slide img,
+    .photo-carousel-slide video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        border-radius: 0;
+    }
+    
+    .photo-carousel-control.photo-prev,
+    .photo-carousel-control.photo-next {
+        display: none;
+    }
+    
+    .photo-carousel-counter {
+        position: absolute;
+        bottom: 2px;
+        right: 5px;
+        font-size: 12px;
+        background: rgba(0,0,0,0.5);
+        color: white;
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+    
+    .photo-carousel-indicators {
+        position: absolute;
+        bottom: 6px;
+        left: 10px;
+        display: flex;
+        gap: 5px;
+    }
+    
+    .photo-indicator-bar {
+        width: 20px;
+        height: 3px;
+        background-color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+    }
+    
+    .photo-indicator-bar.active {
+        background-color: white;
+    }
+
+    /*  */
+
+    .cards-designations {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        margin: 30px 0;
+        width: 100%;
+    }
+
+    .designation-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        transition: transform 0.3s;
+    }
+
+    .designation-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .designation-card img {
+        width: 30px;
+        height: 30px;
+        margin-bottom: 10px;
+    }
+    
+    .designation-card p {
+        text-align: center;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    /*  */
+
+    .reservation-payment-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 50px;
+    }
+
+    .apartment-price {
+        margin: 0;
+        font-size: 30px;
+    }
+
+    .error-message-reservation {
+        font-size: 20px;
+    }
+
+    .reservation-button {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
+        text-decoration: none;
+        color: #ddd;
+        height: 60px;
+        width: 180px;
+        border-style: none;
+        background-color: #007bff;
+        border-radius: 5px;
+        box-shadow: 3px 4px 11px 0px rgba(34, 60, 80, 0.43);
+        transition: .5s;
+    }
+
+    .reservation-button:hover {
+        background-color: #0056b3;
+    }
+
+    .reservation-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    /*  */
+
+    .about-description {
+        margin: 20px 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .about-description-container {
+        width: 90%;
+        font-size: 20px;
+    }
+
+    /*  */
+
+    #map{
+        height: 300px;
+        width: 100%;
+        align-items: flex-start;
+        border-radius: 4px;
+    }
+
+    /*  */
+
+    .header-and-logo-sign {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .logo-sign {
+        position: relative;
+        padding: 130px 0 30px 0;
+        width: 90%;
+        font-size: clamp(1.4rem, 1.8vw, 2.1rem);
+        font-weight: 700;
+        margin: 0;
+        z-index: -1;
+    }
+
+    .short-description-and-map{
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    /* Стили для карусели карточек квартир */
+
+    .carousel-container {
+        margin-top: 50px;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .carousel-btn {
+        display: none;
+    }
+
+    .carousel-wrapper {
+        overflow: hidden;
+        margin-left: 10px;
+        width: 100%;
+    }
+
+    .carousel-track {
+        display: flex;
+        transition: transform 0.6s ease;
+        height: 100%;
+        gap: 20px;
+    }
+
+    .carousel-track .apartment-card {
+        border-radius: 7px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+        max-width: 200px;
+    }
+    
+    /*  */
+
     .calendar {
         display: none;
     }
@@ -1164,7 +2019,8 @@
     }
 
     .search-button {
-        background-color: #007bff;
+        color: white;
+        background-color: rgb(156, 156, 156);
     }
 
     .calendar-component {
@@ -1173,7 +2029,6 @@
         transition: opacity .75s ease, visibility .75s ease;
         border-radius: 5px;
         position: absolute;
-        bottom: 100%;
         left: 0;
         z-index: 999;
         box-shadow: 1px 1px 11px black;
@@ -1223,7 +2078,6 @@
         box-shadow: 1px 1px 11px black;
         padding: 30px 60px;
         position: absolute;
-        bottom: 100%;
         left: 0;
         z-index: 999;
     }
@@ -1281,54 +2135,75 @@
     }
 
     .parallax {
-        background: url('https://live.staticflickr.com/65535/54445143020_c09605fef9_b.jpg') no-repeat;
         width: 100%;
         display: flex;
-        align-items: center;
         justify-content: center;
-         /* opacity: 0.75; */
-         position: relative;
-         height: 100vh;
-         background-size: cover;
-         background-position: center;
-         background-attachment: fixed;
+        position: relative;
     }
 
     .wrapper-parallax {
         position: relative;
         width: 90%;
-        top: 35%;
         display: flex;
         flex-direction: column;
-        background-color: #f0bb59;
-        border: 2px solid #f0bb59;
+        background-color: #000000;
+        border: 2px solid #000000;
         border-radius: 8px;
     }
 
     .wrapper-parallax > * {
-        border: 2px solid #f0bb59;
+        border: 2px solid #000000;
         border-radius: 8px;
         height: 50px;
     }
 
     .logo {
-        font-size: clamp(1.2rem, 1.8vw, 2.3rem);
-        font-family: "Inknut Antiqua", serif;
-        color: var(--phones-header-color);
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        color: rgb(65, 65, 65);
         font-weight: 600;
-        text-align: start;
         padding: 10px 15px;
         border-radius: 7px;
+        order: 2;
+        flex: 1;
+        display: flex;
+        justify-content: flex-start;
+        position: relative;
+    }
+
+    .logo a {
         text-decoration: none;
+        color: white;
+        font-weight: bold;
+        font-size: clamp(1rem, 1.8vw, 2.3rem);
+        font-family: "Inknut Antiqua", serif;
     }
 
     .under-logo-sign {
-        font-size: clamp(1.6rem, 2vw, 2.5rem);
-        margin: 0;
+        display: none;
     }
 
-    .fixed-header {
+    .language-selector {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .language-selector select {
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid #666;
+        color: white;
+        background-color: transparent;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .language-selector select option {
+        color: black;
+    }
+
+    .client-header {
         top: 0;
         left: 0;
         width: 100%;
@@ -1338,6 +2213,21 @@
         justify-content: center;
         align-items: center;
         z-index: 100;
+        background-color: #666;
+        font-family: "Nunito", sans-serif;
+    }
+
+    .admin-header {
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 30px 0;
+        position: fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(102, 102, 102);
+        z-index: 100;
         font-family: "Nunito", sans-serif;
     }
 
@@ -1346,10 +2236,12 @@
         display: flex;
         gap: 20px;
         justify-content: space-between;
+        align-items: center;
+        position: relative;
     }
 
-    .absolute-header {
-        position: absolute;
+    .main-header {
+        position: fixed;
         top: 0;
         left: 0;
         width: 100%;
@@ -1358,12 +2250,11 @@
         justify-content: center;
         align-items: center;
         z-index: 100;
-        background-color: lightgrey;
+        background-color: rgb(87, 87, 87);
         font-family: "Nunito", sans-serif;
     }
 
     .my-page {
-        margin-top: 150px;
         flex: 1;
         overflow: hidden;
         background-color: white;
@@ -1375,12 +2266,10 @@
     }
 
     .my-main-page {
-        flex: 1;
-        overflow: hidden;
         background-color: white;
         font-family: "Nunito", sans-serif;
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         flex-direction: column;
     }
@@ -1402,8 +2291,12 @@
         transition: .5s ease;
     }
 
+    .main-header .burger-menu {
+        order: 1;
+    }
+
     .burger-menu.open {
-        background-color: var(--phones-header-color);
+        background-color: rgb(65, 65, 65);
     }
 
     .burger-menu.open div {
@@ -1414,7 +2307,7 @@
     .burger-menu div {
         width: 30px;
         height: 4px;
-        background-color: var(--phones-header-color);
+        background-color: rgb(255, 255, 255);
         box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
         margin: 5px 0;
         transition: 0.5s ease;
@@ -1422,29 +2315,32 @@
     }
 
     .mobile-nav {
-        opacity: 0;
+        position: fixed; /* фиксируем относительно окна */
+        top: 0;
+        left: 0;
+        height: 100vh; /* на всю высоту экрана */
+        width: 80%;
+        background: rgba(29, 29, 29, 0.9);
+        padding: 80px 40px;
         display: flex;
         flex-direction: column;
-        position: absolute;
-        top: 110px;
-        right: 0;
-        background: rgba(0, 0, 0, 0.9);
+        transform: translateX(-100%); /* спрятан за экраном слева */
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease;
+        z-index: 9999;
+        opacity: 0;
         pointer-events: none;
-        width: 100%;
-        padding: 20px;
-        transition: .5s ease;
     }
 
     .mobile-nav.open {
-        display: flex;
+        transform: translateX(0); /* выезжает */
         opacity: 1;
         pointer-events: auto;
     }
 
     .mobile-nav a {
-        color: white;
+        color: white !important;
         font-size: 1.2rem;
-        padding: 10px 0;
+        padding: 20px 0;
         text-align: center;
         border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         text-decoration: none;
@@ -1495,7 +2391,7 @@
 
     .apartment-btn {
         display: block;
-        background: #007bff;
+        background: #8f8f8f;
         color: white;
         padding: 9px;
         border-radius: 5px;
@@ -1508,50 +2404,11 @@
     }
 
     .apartment-btn:hover {
-        background: #0056b3;
-    }
-
-    .scroll-to-top {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-        background-color: #bbae3c;
-        color: white;
-        font-size: 24px;
-        font-weight: bold;
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-        transition: opacity 0.3s, transform 0.3s;
-        opacity: 0;
-        transform: translateY(20px);
-        z-index: 10000;
-    }
-
-    .scroll-to-top.show {
-        opacity: 1;
-        transform: translateY(0);
+        background: #363636;
     }
 
     .sort-button {
         margin: 34px 0 10px 0;
-    }
-
-    .my-footer {
-        padding-top: 50px;
-        bottom: 0;
-        width: 100%;
-        height: 150px;
-        background-color: var(--footer-color);
-        text-align: center;
-        color: black;
-        font-family: "Nunito", sans-serif;
     }
 
     .about-natalia {
@@ -1599,186 +2456,144 @@
     .about-more-button:hover {
         background-color: black;
     }
-}
 
-/* @media screen and (max-width: 767px) {
-    .wrapper-parallax {
-        flex-direction: column;
-        height: auto; 
-        padding: 20px;
-        gap: 10px; 
-        width: 95%;
-    }
-
-    .search-button {
-        background-color: var(--slava-color);
-        width: 100%;
-        font-size: 18px;
-        padding: 10px;
-    }
-
-    .logo {
-        font-size: clamp(1rem, 2vw, 2.5rem);
-        font-family: "Inknut Antiqua", serif;
-        color: white;
-        background-color: #bbae3c;
-        text-align: center;
-        padding: 10px 15px;
-        border-radius: 7px;
-        user-select: none;
-        text-decoration: none;
-    }
-
-    .fixed-header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        display: flex;
-        padding: 20px 70px;
-        justify-content: space-between;
-        align-items: center;
-        z-index: 100;
-        font-family: "Nunito", sans-serif;
-    }
-
-    .absolute-header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        padding: 20px 70px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        z-index: 100;
-        background-color: lightgrey;
-        font-family: "Nunito", sans-serif;
-    }
-
-    .my-page {
-        margin-top: 120px;
-        flex: 1;
-        overflow: hidden;
-        background-color: rgb(255, 253, 250);
-        font-family: "Nunito", sans-serif;
+    .register-form {
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-direction: column;
+        padding: 40px 20px;
     }
 
-    .navigation {
-        display: none;
-    }
-
-    .burger-menu {
+    .login-form {
         display: flex;
-        flex-direction: column;
-        cursor: pointer;
-        background-color: var(--slava-color);
-        padding: 6px 10px;
-        border-radius: 5px;
+        justify-content: center;
         align-items: center;
-        transition: .5s ease;
+        padding: 40px 20px;
     }
 
-    .burger-menu.open {
-        background-color: black;
-    }
-
-    .mobile-nav.open {
-        display: flex;
-        opacity: 1;
-        pointer-events: auto;
-    }
-
-    .burger-menu div {
-        width: 30px;
-        height: 4px;
-        background-color: white;
-        margin: 5px 0;
-        transition: 0.5s ease;
-    }
-
-    .mobile-nav {
-        opacity: 0;
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        top: 94px;
-        right: 0;
-        background: rgba(0, 0, 0, 0.9);
+    .form-wrapper {
+        max-width: 500px;
         width: 100%;
-        padding: 20px;
-        transition: .5s ease;
-        pointer-events: none;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
-    .mobile-nav a {
-        color: white;
-        font-size: 1.2rem;
-        padding: 10px 0;
+    .form-title {
+        font-size: 28px;
+        font-weight: bold;
         text-align: center;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        text-decoration: none;
+        margin-bottom: 15px;
     }
 
-    .apartments-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        padding: 10px;
+    .form-subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 25px;
     }
 
-    .apartment-card {
+    .form-error {
+        background-color: #ffd6d6;
+        color: #a00;
+        padding: 12px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .form-body {
         display: flex;
         flex-direction: column;
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        margin-bottom: 15px;
-        overflow: hidden;
-        max-width: 250px;
+        gap: 20px;
     }
 
-    .apartment-img {
-        height: 150px;
+    .form-group {
+        display: flex;
+        flex-direction: column;
     }
 
-    .apartment-body {
-        padding: 10px;
+    .form-group label {
+        font-weight: 600;
+        margin-bottom: 6px;
     }
 
-    .apartment-title {
-        font-size: 1rem;
-        color: #333;
+    .form-input {
+        padding: 10px 14px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
     }
 
-    .apartment-text {
-        font-size: 0.8rem;
-        color: #666;
-    }
-
-    .apartment-price {
-        font-size: 1.2rem;
-    }
-
-    .apartment-btn {
-        display: block;
-        background: #007bff;
-        color: white;
-        padding: 8px;
-        border-radius: 5px;
-        font-size: 0.85rem;
+    .form-button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 12px;
         font-weight: bold;
-        transition: 0.3s ease-in-out;
-        text-align: center;
-        text-decoration: none;
-        margin-top: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
     }
 
-    .apartment-btn:hover {
-        background: #0056b3;
+    .form-button:disabled {
+        background-color: #5a92d6;
+        cursor: not-allowed;
+    }
+
+    .form-button:hover:not(:disabled) {
+        background-color: #0066cc;
+    }
+
+    .form-footer {
+        margin-top: 20px;
+        text-align: center;
+        color: #888;
+        font-size: 14px;
+    }
+
+    .about-us-container {
+        width: 80%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin-bottom: 60px;
+    }
+
+    .about-us-contacts {
+        gap: 20px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin: 40px 0;
+    }
+
+    .about-us-contacts a {
+        gap: 5px;
+        text-decoration: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        background-color: #00000044;
+        border-radius: 5px;
+        padding: 7px 10px;
+    }
+
+    .about-us-img {
+        width: 30px;
+    }
+
+    .about-us-explanation {
+        font-weight: 600;
+        padding-top: 5px;
+        color: #000000;
+    }
+
+    .about-us-text {
+        font-size: 18px;
     }
 
     .scroll-to-top {
@@ -1787,7 +2602,7 @@
         right: 20px;
         width: 50px;
         height: 50px;
-        background-color: #bbae3c;
+        background-color: #000000;
         color: white;
         font-size: 24px;
         font-weight: bold;
@@ -1809,73 +2624,130 @@
         transform: translateY(0);
     }
 
-    .sort-button {
-        margin: 34px 0 10px 10px;
+    .my-footer {
+        background-color: #333;
+        color: #fff;
+        font-family: "Nunito", sans-serif;
+        padding: 40px 20px 20px;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .footer-section {
+        flex: 1 1 200px;
+        min-width: 180px;
+    }
+
+    .footer-section h4,
+    .footer-section h3 {
+        font-size: 18px;
+        margin-bottom: 12px;
+        color: #fff;
+    }
+
+    .footer-section p,
+    .footer-section ul,
+    .footer-section a {
+        font-size: 14px;
+        color: #ccc;
+        text-decoration: none;
+    }
+
+    .footer-section ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .footer-section ul li {
+        margin-bottom: 8px;
+    }
+
+    .footer-section a:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+    .footer-bottom {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 13px;
+        color: #aaa;
+        border-top: 1px solid #555;
+        padding-top: 15px;
+    }
+
+    .insta-icon {
+        width: 24px;
+        height: 24px;
+        background-color: white;
+    }
+
+    .admin-mobile-apartment-list {
+        margin: 140px 0;
+        padding: 20px;
+        position: relative;
+    }
+    
+    .admin-apartment-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
+    }
+    
+    .admin-apartment-img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 15px;
+        object-fit: cover;
+    }
+    
+    .admin-apartment-name {
+        font-weight: bold;
+    }
+    
+    .admin-add-button {
+        position: fixed;
+        padding-bottom: 5px;
+        bottom: 80px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #28a745;
+        color: white;
+        font-size: 30px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .carousel-wrapper {
+        overflow-x: auto;
+        scroll-behavior: smooth;
+    }
+    
+    .carousel-track {
+        display: flex;
+        gap: 16px;
+        width: max-content;
+    }
+    
+    .apartment-card {
+        flex: 0 0 auto;
+        width: 240px;
+        scroll-snap-align: start;
+    }
+    
+    .carousel-wrapper::-webkit-scrollbar {
+        display: none;
     }
 }
-
-@media screen and (max-width: 480px) {
-    .fixed-header {
-        padding: 15px 22px;
-    }
-
-    .absolute-header {
-        padding: 15px 22px;
-    }
-
-    .apartments-grid {
-        grid-template-columns: 1fr;
-        align-items: center;
-    }
-
-    .apartment-card {
-        display: flex;
-        flex-direction: column;
-        background: #fff;
-        border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 15px;
-        overflow: hidden;
-        max-width: 220px;
-    }
-
-    .apartment-img {
-        height: 130px;
-    }
-
-    .apartment-body {
-        padding: 8px;
-    }
-
-    .apartment-title {
-        font-size: 0.9rem;
-        color: #333;
-    }
-
-    .apartment-text {
-        font-size: 0.75rem;
-        color: #666;
-    }
-
-    .apartment-price {
-        font-size: 1.1rem;
-    }
-
-    .apartment-btn {
-        display: block;
-        background: #007bff;
-        color: white;
-        padding: 7px;
-        border-radius: 5px;
-        font-size: 0.8rem;
-        font-weight: bold;
-        transition: 0.3s ease-in-out;
-        text-align: center;
-        text-decoration: none;
-        margin-top: 10px;
-    }
-
-    .apartment-btn:hover {
-        background: #0056b3;
-    }
-} */

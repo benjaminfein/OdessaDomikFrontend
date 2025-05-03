@@ -1,0 +1,103 @@
+{
+    "main": {
+      "search": "Search"
+    },
+    "header": {
+        "main" : "Main",
+        "about" : "About",
+        "signUp" : "Sign up",
+        "signIn" : "Sign in",
+        "account" : "Account",
+        "myAccount" : "My account",
+        "signOut" : "Sign out",
+        "underLogoSign" : "We rent apartments daily Odessa, Arcadia<0/>We have been successfully running our business for {{years}} years!"
+    },
+    "calendar": {
+        "checkInDate" : "Check-in date",
+        "checkOutDate" : "Check-out date",
+
+        "Mon": "Mon",
+        "Tue": "Tue",
+        "Wed": "Wed",
+        "Thu": "Thu",
+        "Fri": "Fri",
+        "Sat": "Sat",
+        "Sun": "Sun",
+
+        "Jan": "Jan",
+        "Feb": "Feb",
+        "Mar": "Mar",
+        "Apr": "Apr",
+        "May": "May",
+        "Jun": "Jun",
+        "Jul": "Jul",
+        "Aug": "Aug",
+        "Sep": "Sep",
+        "Oct": "Oct",
+        "Nov": "Nov",
+        "Dec": "Dec"
+    },
+    "guestCounter": {
+        "guests" : "guests",
+        "amountOfGuests" : "Amount of guests",
+        "ready" : "Ready"
+    },
+    "aboutUs": {
+        "ourInstagram" : "Our Instagram",
+        "ourPhoneNumber" : "Phone number",
+        "text" : "Hello!<0/>We are glad to welcome you to our daily rent website.<0/><0/>The apartments that we offer are located in the TOP locations of Odessa, the sunny south of Ukraine.<0/>District for rest - Arcadia<0/>First line from the sea.<0/><0/>New residential complex Gagarin Plaza. Large closed territory, underground parking.<0/><0/>5-6 minutes walk to the sea<0/>Near our complex:<0/>Shopping center, cafes, restaurants. Water park and casino.<0/>Night clubs and children's entertainment complex.<0/>Large park area.<0/>Convenient transportation interchange, final stop for shuttle buses and public transport.<0/><0/>Apartments vary in size and may differ in the number of beds and view.<0/><0/>They mostly come with panoramic glazing.<0/>There are some with a beautiful view of the city and Arcadia.<0/>There are also some with a stunning view of the sea!<0/><0/>Everything is thought out for your comfortable stay.<0/>From kitchenware to iron and hair dryer.<0/><0/>We have been engaged in daily rent for {{years}} years and are ready to organize your stay in Odessa with maximum comfort.<0/><0/>Guests often become our regular customers because the convenient location of the complex is combined with the professional individual approach of our managers to each guest.<0/><0/>Coziness, cleanliness and comfort - this is about us!"
+    },
+    "footer": {
+        "description": "Daily apartment rental in Odesa for tourists and city residents.",
+        "navigation": "Navigation",
+        "main": "Home",
+        "about": "About us",
+        "apartments": "Apartments",
+        "profile": "Account",
+        "legal": "Legal",
+        "privacyPolicy": "Privacy Policy",
+        "terms": "Terms of Use",
+        "contacts": "Contacts",
+        "rights": "All rights reserved."
+    },
+    "searchingResults": {
+        "apartmentsListTitle": "Apartment options with selected features:",
+        "searchButton": "Search",
+        "sort": "Sort",
+        "sortByAsc": "Price: Low to High",
+        "sortByDesc": "Price: High to Low",
+        "sortByNew": "Newest first",
+        "sortByOld": "Oldest first",
+        "showPrices": "Show prices",
+        "availability": "Check availability"
+    },
+    "reservationComponent": {
+        "loading": "Loading...",
+        "parking": "Parking space",
+        "wifi": "Free WiFi",
+        "seaView": "Sea view",
+        "floorNumber": "Floor number: {{number}}",
+        "area": "Apartment area: {{area}}",
+        "sleepPlaces": "Number of sleeping places: {{count}}",
+        "apartmentNotValid": "This apartment does not match your search",
+        "reserveButton": "I reserve",
+        "livingConditions": "Living conditions",
+        "agreeWithRules": "You agree to our accommodation rules and terms of use",
+        "submitReservation": "Submit reservation request",
+        "phoneCopied": "Phone number copied!",
+        "reservationSuccess": "Reservation request sent. Please remember to call our manager!",
+        "reservationError": "An error occurred. Please try again.",
+        "checkRulesAlert": "Please agree to the rules before submitting the reservation.",
+        "attentionText": "ATTENTION!<0 /><0 />Without a call to this number, your reservation will be canceled within an hour!<0 />Please make a call AFTER clicking the \"Submit reservation request\" button<0 /><0 />Phone number for reservation confirmation:<0 /><0 />",
+        "modalText": "Hello!<0 />Thank you for your reservation request for our apartments! We are glad you chose us and will be happy to provide you with comfortable accommodation.<0 />Apartment address:<0 />Haharinske Plateau 5/2, new residential complex “Haharin Plaza”.<0 />Important information<0 />Smoking and hosting events in our apartments is strictly prohibited.<0 />Upon check-in, you must present an original passport and leave a security deposit of 2000 UAH as a guarantee.<0 />The deposit is refunded upon check-out after inspection.<0 />Please note: in some cases the deposit amount may be increased, for example:<0 />• if you stay with pets;<0 />• if guests under 21 are not accompanied by parents.<0 />The final decision on check-in and deposit amount is made after a call with the manager.<0 />Check-in and check-out times<0 />• Check-in: from 14:30<0 />• Check-out: until 11:00<0 />Reservation confirmation<0 />To guarantee your booking, a prepayment equal to one night’s stay is required.<0 />Upon arrival, the remaining amount and the deposit are paid.<0 />How to make a prepayment?<0 />Please contact us to receive payment details and further info.<0 />If you do not get in touch within 1 hour after the request, and do not pay the prepayment within the agreed time, the reservation may be canceled.<0 />Please inform us after the payment! We will check it and confirm your reservation.<0 />Keep your receipt until check-in!<0 />Thank you for understanding! We are looking forward to your stay!<0 /><0 />"
+    },
+    "profile": {
+        "personalData": "Personal Data",
+        "name": "Name",
+        "username": "Username",
+        "phoneNumber": "Phone Number",
+        "createdAt": "Profile Creation Date",
+        "notSpecified": "Not specified",
+        "errorMessage": "Failed to load profile data. Please try again later."
+    }
+}

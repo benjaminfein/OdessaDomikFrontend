@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from 'react'
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../AuthContext';
-import '../App.css'
 import MapComponent from './MapComponent';
 import Cookies from 'js-cookie';
 import CalendarComponent from './CalendarComponent';
@@ -9,6 +8,10 @@ import GuestCounterComponent from './GuestCounterComponent';
 import { getApartment, getAvailableApartments } from '../services/ApartmentService';
 import { createReservation } from '../services/ApartmentService';
 import { placeReservationOnHold } from '../services/ApartmentService';
+import { useTranslation, Trans } from 'react-i18next';
+import i18n from '../i18n';
+import { getApartmentPhotos } from '../services/S3Service';
+import '../App.css'
 
 const ReservationComponent = () => {
     const location = useLocation();
@@ -27,6 +30,21 @@ const ReservationComponent = () => {
     const stateTotalPrice = location.state?.totalPrice || Cookies.get('totalPrice') || '';
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
+    const [currentImage, setCurrentImage] = useState(0);
+    const { t, ready } = useTranslation();
+    const [images, setImages] = useState([]);
+    const [guestCount, setGuestCount] = useState(Number(stateGuestCount));
+    const [touchStartX, setTouchStartX] = useState(null);
+    const [touchEndX, setTouchEndX] = useState(null);
+    const minSwipeDistance = 50;
+    const [previousGuestCount, setPreviousGuestCount] = useState(
+        Number(Cookies.get('previousGuestCount')) || Number(stateGuestCount)
+    );
+    const isSearchClicked = useRef(false);
+    const isVideo = (url) => {
+        const extension = url.split('.').pop().toLowerCase();
+        return ['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv', 'flv', 'wmv'].includes(extension);
+    };
     const [dates, setDates] = useState({
         checkIn: stateCheckIn,
         checkOut: stateCheckOut,
@@ -35,11 +53,90 @@ const ReservationComponent = () => {
         checkIn: Cookies.get('previousCheckIn') || '',
         checkOut: Cookies.get('previousCheckOut') || '',
     });
-    const [guestCount, setGuestCount] = useState(Number(stateGuestCount));
-    const [previousGuestCount, setPreviousGuestCount] = useState(
-        Number(Cookies.get('previousGuestCount')) || Number(stateGuestCount)
-    );
-    const isSearchClicked = useRef(false);
+    const handlePrev = () => {
+        setCurrentImage(prev => prev === 0 ? images.length - 1 : prev - 1);
+    };
+    const handleNext = () => {
+        setCurrentImage(prev => prev === images.length - 1 ? 0 : prev + 1);
+    };
+    const handleTouchStart = (e) => {
+        setTouchStartX(e.touches[0].clientX);
+    };
+    const handleTouchMove = (e) => {
+        setTouchEndX(e.touches[0].clientX);
+    };
+
+    const handleTouchEnd = () => {
+        if (!touchStartX || !touchEndX) return;
+    
+        const distance = touchStartX - touchEndX;
+        if (distance > minSwipeDistance) {
+            // свайп влево
+            if (currentImage < images.length - 1) {
+                setCurrentImage(currentImage + 1);
+            }
+        } else if (distance < -minSwipeDistance) {
+            // свайп вправо
+            if (currentImage > 0) {
+                setCurrentImage(currentImage - 1);
+            }
+        }
+    
+        // сброс
+        setTouchStartX(null);
+        setTouchEndX(null);
+    };
+
+    useEffect(() => {
+        if (sessionStorage.getItem('reloadAfterLogin') === 'true') {
+            sessionStorage.removeItem('reloadAfterLogin');
+            window.location.reload();
+        }
+    }, []);
+
+    useEffect(() => {
+        const track = document.querySelector('.carousel-track');
+        let startX = 0;
+        let isSwiping = false;
+    
+        const handleTouchStart = (e) => {
+            startX = e.touches[0].clientX;
+            isSwiping = true;
+        };
+    
+        const handleTouchMove = (e) => {
+            if (!isSwiping) return;
+            const currentX = e.touches[0].clientX;
+            const diffX = startX - currentX;
+    
+            // Порог свайпа (чтобы не срабатывало на случайных касаниях)
+            if (diffX > 30) {
+                handleNext();
+                isSwiping = false;
+            } else if (diffX < -30) {
+                handlePrev();
+                isSwiping = false;
+            }
+        };
+    
+        const handleTouchEnd = () => {
+            isSwiping = false;
+        };
+    
+        if (track) {
+            track.addEventListener('touchstart', handleTouchStart);
+            track.addEventListener('touchmove', handleTouchMove);
+            track.addEventListener('touchend', handleTouchEnd);
+        }
+    
+        return () => {
+            if (track) {
+                track.removeEventListener('touchstart', handleTouchStart);
+                track.removeEventListener('touchmove', handleTouchMove);
+                track.removeEventListener('touchend', handleTouchEnd);
+            }
+        };
+    }, [currentImage]);  // Следим за обновлением currentImage    
 
     useEffect(() => {
         if (!isSearchClicked.current) return;
@@ -65,63 +162,54 @@ const ReservationComponent = () => {
     }, [id, previousDates.checkIn, previousDates.checkOut, guestCount]); 
 
     const isParkingLotThereOrNot = (value) => {
-        return value ? <div className="col"><div className="card card-designations">
-        <div className="about-card-body card-body">
-            <div className="container-images-icons">
-                <img src="https://www.svgrepo.com/show/487658/parking.svg" className="small-images-designations"></img>
+        return value ? (
+            <div className="designation-card">
+                <img src="https://www.svgrepo.com/show/487658/parking.svg" alt={t('reservationComponent.parking')} />
+                <p>{t('reservationComponent.parking')}</p>
             </div>
-            <div className="parking-and-wifi-container-text-about">
-                <h6 className="text-designation card-subtitle text-body-secondary">Парковочное место</h6>
-            </div>
-        </div>
-    </div></div> : <div className="empty-div"></div>;
+        ) : <div className="empty-div"></div>;
     };
 
     const isWiFiThereOrNot = (value) => {
-        return value ? <div className="col"><div className="card card-designations">
-        <div className="about-card-body card-body">
-            <div className="container-images-icons">
-                <img src="https://www.svgrepo.com/show/532893/wifi.svg" className="small-images-designations"></img>
+        return value ? (
+            <div className="designation-card">
+                <img src="https://www.svgrepo.com/show/532893/wifi.svg" alt={t('reservationComponent.wifi')} />
+                <p>{t('reservationComponent.wifi')}</p>
             </div>
-            <div className="parking-and-wifi-container-text-about">
-                <h6 className="text-designation card-subtitle text-body-secondary">Бесплатный WiFi</h6>
-            </div>
-        </div>
-    </div></div> : <div className="empty-div"></div>;
+        ) : <div className="empty-div"></div>;
     };
 
     const isSeaViewThereOrNot = (value) => {
-        return value ? <div className="col"><div className="card card-designations">
-        <div className="about-card-body card-body">
-            <div className="container-images-icons">
-                <img src="https://www.svgrepo.com/show/246158/sea.svg" className="small-images-designations"></img>
+        return value ? (
+            <div className="designation-card">
+                <img src="https://www.svgrepo.com/show/246158/sea.svg" alt={t('reservationComponent.seaView')} />
+                <p>{t('reservationComponent.seaView')}</p>
             </div>
-            <div className="container-text-about">
-                <h6 className="text-designation card-subtitle text-body-secondary">Вид на море</h6>
-            </div>
-        </div>
-    </div></div> : <div className="empty-div"></div>;
+        ) : <div className="empty-div"></div>;
     };
 
     useEffect(() => {
         const fetchApartment = async () => {
             try {
-                setLoading(true); // Устанавливаем состояние загрузки
-                const response = await getApartment(id); // Ожидаем выполнения запроса
-                setApartment(response.data); // Сохраняем данные в state
+                setLoading(true);
+                const response = await getApartment(id);
+                setApartment(response.data);
+    
+                const photos = await getApartmentPhotos(id);
+                setImages(photos);
             } catch (error) {
                 console.error("Ошибка при загрузке данных:", error);
             } finally {
-                setLoading(false); // Выключаем состояние загрузки
+                setLoading(false);
             }
         };
-
+    
         fetchApartment();
     }, [id]);
 
     const handleReservation = () => {
         if (!user) {
-            navigate('/login');
+            navigate(`/${i18n.language}/login`, { state: { from: location.pathname } });
         } else {
             setIsModalOpen(true);
         }
@@ -156,14 +244,14 @@ const ReservationComponent = () => {
                 console.log(responsePlaceReservationOnHold);
     
                 // Логика успешной отправки
-                alert("Заявка на бронирование отправлена. Пожалуйста, не забудьте набрать нашего менеджера!");
+                alert(t('reservationComponent.reservationSuccess'));
                 setIsModalOpen(false);  // Закрываем модальное окно
             } catch (error) {
                 console.error("Ошибка при отправке бронирования:", error);
-                alert("Произошла ошибка. Попробуйте снова.");
+                alert(t('reservationComponent.reservationError'));
             }
         } else {
-            alert("Пожалуйста, согласитесь с правилами перед отправкой бронирования.");
+            alert(t('reservationComponent.checkRulesAlert'));
         }
     };    
 
@@ -242,196 +330,181 @@ const ReservationComponent = () => {
     function copyPhoneNumber() {
         const phoneNumber = document.querySelector('.phone-number').textContent;
         navigator.clipboard.writeText(phoneNumber).then(() => {
-            alert("Номер скопирован!");
+            alert(t('reservationComponent.phoneCopied'));
         }).catch((err) => {
             console.error("Ошибка при копировании номера: ", err);
         });
     }
 
-    return (
-    <div className='my-page'>
-        {loading ? <h4>Загрузка...</h4> : (
-            <>
-            <h4 className='about-apartment-name'>{apartment.name}</h4>
-            <p className='about-apartment-address'>{apartment.address}</p>
-            <div className='my-container'>
-                <div className="about-first-section">
-                    <div id="carouselExampleIndicators" className="carousel slide">
-                    <div className="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                    </div>
-                    <div className="carousel-inner">
-                        <div className="carousel-item active">
-                        <img src="https://live.staticflickr.com/65535/54186708396_2c1315a661_k.jpg" className="d-block w-100" alt="..." />
-                        </div>
-                        <div className="carousel-item">
-                        <img src="https://live.staticflickr.com/65535/54185825672_9ebdd26457_k.jpg" className="d-block w-100" alt="..." />
-                        </div>
-                        <div className="carousel-item">
-                        <img src="https://live.staticflickr.com/65535/54186708461_82f2c5f6f3_k.jpg" className="d-block w-100" alt="..." />
-                        </div>
-                    </div>
-                    <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span className="visually-hidden">Previous</span>
-                    </button>
-                    <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span className="visually-hidden">Next</span>
-                    </button>
-                    </div>
-                    <div className='short-description-and-map'>
-                            <div className='about-apartment-short-description'>{apartment.shortDescription}</div>
-                            <MapComponent />
-                            <div className="wrapper-parallax" style={{marginLeft: '100px', width: '775px', gap: '10px'}}>
-                                <CalendarComponent dates={dates} setDates={setDates} />
-                                <GuestCounterComponent guestCount={guestCount} setGuestCount={setGuestCount} maxGuests={maxGuests} />
-                                <button className='search-button' onClick={handleSearch}>Поиск</button>
-                            </div>
-                    </div>
-                </div>
-                <div className="about-second-section">
-                    <div className="cards-designations">
-                        {isParkingLotThereOrNot(apartment.hasParkingLot)}
-                        {isWiFiThereOrNot(apartment.hasWiFi)}
-                        <div className="col">
-                            <div className="card card-designations">
-                                <div className="about-card-body card-body">
-                                    <div className="container-images-icons">
-                                        <img src="https://www.svgrepo.com/show/473067/building.svg" className="small-images-designations"></img>
-                                    </div>
-                                    <div className="container-text-about">
-                                        <h6 className="text-designation card-subtitle text-body-secondary">Номер этажа: {apartment.floorNumber}</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col">
-                            <div className="card card-designations">
-                                <div className="about-card-body card-body">
-                                    <div className="container-images-icons">
-                                        <img src="https://www.svgrepo.com/show/501713/ruler.svg" className="small-images-designations"></img>
-                                    </div>
-                                    <div className="container-text-about">
-                                        <h6 className="text-designation card-subtitle text-body-secondary">Площадь квартиры: {apartment.areaOfApartment} м²</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {isSeaViewThereOrNot(apartment.hasSeaView)}
-                        <div className="col">
-                            <div className="card card-designations">
-                                <div className="about-card-body card-body">
-                                    <div className="container-images-icons">
-                                        <img src="https://www.svgrepo.com/show/490555/bed-double.svg" className="small-images-designations"></img>
-                                    </div>
-                                    <div className="container-text-about">
-                                        <h6 className="text-designation card-subtitle text-body-secondary">Количество спальных мест: {apartment.countOfSleepPlaces}</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="reservation-payment-content">
-                        {isApartmentValid ? (
-                            <div className="apartment-price">
-                                {calculateTotalPrice(apartment.price)} грн
-                            </div>
-                        ) : (
-                            <div className="apartment-price error-message-reservation">
-                                Данная квартира не соответствует выбранному запросу
-                            </div>
-                        )}
+    if (!ready) return null;
 
-                        <button 
-                            className="reservation-button"
-                            onClick={handleReservation}
-                            disabled={!isApartmentValid}
-                        >
-                            Я бронирую
-                        </button>
-                        {/* Модальное окно */}
-                        {isModalOpen && (
-                            <div className="modal-overlay">
-                                <div className="modal-content">
-                                    <div style={{ display: "flex" }}>
-                                        <div className="email-template">
-                                            <h4>Условия проживания</h4>
-                                            {/* Тут будет письмо */}
-                                            <p className="modal-text">Здравствуйте! <br />
-                                            Спасибо за ваш запрос на бронирование наших апартаментов! Мы рады, что вы выбрали именно нас, и будем рады обеспечить вам комфортное проживание.<br />
-                                            Адрес апартаментов:<br />
-                                            Гагаринское плато 5/2, новый жилой комплекс “Гагарин Плаза”.<br />
-                                            Важная информация<br />
-                                            Курение и проведение мероприятий в наших апартаментах категорически запрещены.<br />
-                                            При заселении необходимо предъявить оригинал паспорта и внести залоговый депозит в размере 2000 грн в качестве гарантии сохранности имущества.<br />
-                                            Возврат депозита осуществляется при выезде после проверки квартиры.<br />
-                                            Обратите внимание: В некоторых случаях сумма залогового депозита может быть увеличена, например:<br />
-                                            <ul><li>при заселении с животными;</li>
-                                                <li>размещении гостей младше 21 года без сопровождения родителей.</li>
-                                            </ul>
-                                            После беседы с менеджером принимается окончательное решение о возможности заселения и размере залогового депозита.<br />
-                                            Время заезда и выезда
-                                            <ul><li>🕒 Заезд: с 14:30</li>
-                                                <li>🕚 Выезд: до 11:00</li>
-                                            </ul>
-                                            Подтверждение бронирования<br />
-                                            Для гарантированного бронирования необходимо внести предоплату в размере стоимости первых суток проживания.<br />
-                                            По приезду оплачивается оставшаяся сумма за проживание + залоговый депозит.<br />
-                                            Как внести предоплату?<br />
-                                            Пожалуйста, свяжитесь с нами для получения реквизитов и дополнительной информации.<br />
-                                            Если в течение 1 часа после запроса вы не выходите на связь, а также не вносите предоплату в оговоренный с менеджером срок, бронирование может быть отменено.<br />
-                                            После отправки предоплаты обязательно сообщите нам! Мы проверим поступление средств и подтвердим ваше бронирование.<br />
-                                            Сохраняйте квитанцию до поселения !<br />
-                                            Благодарим за понимание! Ждем вас и будем рады вашему приезду!<br /><br />
-                                            </p>
+    return (
+        <div className='my-page'>
+            {loading ? <h4>{t('reservationComponent.loading')}</h4> : (
+                <>
+                <h4 className='about-apartment-name'>{apartment.name}</h4>
+                <p className='about-apartment-address'>{apartment.address}</p>
+                <div className='my-container'>
+                    <div className="about-first-section">
+                        <div className="about-first-section-container">
+                            <div
+                                className="photo-carousel"
+                                onTouchStart={handleTouchStart}
+                                onTouchMove={handleTouchMove}
+                                onTouchEnd={handleTouchEnd}
+                            >
+                                <div
+                                    className="photo-carousel-track"
+                                    style={{ transform: `translateX(-${currentImage * 100}%)` }}
+                                >
+                                    {images.length > 0 ? images.map((media, index) => (
+                                        <div className="photo-carousel-slide" key={index}>
+                                            {isVideo(media) ? (
+                                                <video controls>
+                                                    <source src={media} type="video/mp4" />
+                                                    Ваш браузер не поддерживает видео.
+                                                </video>
+                                            ) : (
+                                                <img src={media} alt={`Slide ${index}`} />
+                                            )}
                                         </div>
-                                        <div className="modal-call-manager">
-                                            ВНИМАНИЕ!<br /><br />
-                                            Без звонка по этому номеру ваша бронь будет анулированна в течении часа!<br />
-                                            Пожалуйста, совершите звонок ПОСЛЕ нажатия кнопки "Оставить заявку на бронирование"<br /><br />
-                                            Номер телефона для подтверждения вашей брони менеджером:<br /><br />
-                                            <div className="phone-number-container">
-                                                <a className="phone-number" href="tel:+380634487370" style={{ textDecoration: "none" }}>+380634487370</a>
-                                                <button className="copy-button" onClick={copyPhoneNumber}>
-                                                    <i className="fa-solid fa-copy"></i>
-                                                </button>
+                                    )) : (
+                                        <div className="photo-carousel-slide">
+                                            <img src="https://via.placeholder.com/800x500?text=Нет+фото" alt="Заглушка" />
+                                        </div>
+                                    )}
+                                </div>
+
+                                <button className="photo-carousel-control photo-prev" onClick={handlePrev}>&#10094;</button>
+                                <button className="photo-carousel-control photo-next" onClick={handleNext}>&#10095;</button>
+
+                                <div className="photo-carousel-indicators">
+                                    {images.map((_, index) => (
+                                        <div
+                                            key={index}
+                                            className={`photo-indicator-bar ${index === currentImage ? 'active' : ''}`}
+                                            onClick={() => setCurrentImage(index)}
+                                        />
+                                    ))}
+                                </div>
+
+                                <div className="photo-carousel-counter">
+                                    {currentImage + 1}/{images.length}
+                                </div>
+                            </div>
+
+                            <div className='short-description-and-map'>
+                                    <div className='about-apartment-short-description'>{apartment.shortDescription}</div>
+                                    <MapComponent />
+                                    <div className="wrapper-parallax" style={{width: '100%'}}>
+                                        <CalendarComponent dates={dates} setDates={setDates} />
+                                        <GuestCounterComponent guestCount={guestCount} setGuestCount={setGuestCount} maxGuests={maxGuests} />
+                                        <button className='search-button' onClick={handleSearch}>{t('main.search')}</button>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="about-second-section">
+                        <div className="cards-designations">
+                            {isParkingLotThereOrNot(apartment.hasParkingLot)}
+                            {isWiFiThereOrNot(apartment.hasWiFi)}
+
+                            <div className="designation-card">
+                                <img src="https://www.svgrepo.com/show/473067/building.svg" alt="Этаж" />
+                                <p>{t('reservationComponent.floorNumber', { number: apartment.floorNumber })}</p>
+                            </div>
+
+                            <div className="designation-card">
+                                <img src="https://www.svgrepo.com/show/501713/ruler.svg" alt="Площадь" />
+                                <p>{t('reservationComponent.area', { area: apartment.areaOfApartment })} м²</p>
+                            </div>
+
+                            {isSeaViewThereOrNot(apartment.hasSeaView)}
+
+                            <div className="designation-card">
+                                <img src="https://www.svgrepo.com/show/490555/bed-double.svg" alt="Спальные места" />
+                                <p>{t('reservationComponent.area', { area: apartment.areaOfApartment })} м²</p>
+                            </div>
+                        </div>
+                        <div className="reservation-payment-content">
+                            {isApartmentValid ? (
+                                <div className="apartment-price" style={{fontSize: '38px'}}>
+                                    {calculateTotalPrice(apartment.price)} грн
+                                </div>
+                            ) : (
+                                <div className="apartment-price error-message-reservation">
+                                    {t('reservationComponent.apartmentNotValid')}
+                                </div>
+                            )}
+
+                            <button 
+                                className="reservation-button"
+                                onClick={handleReservation}
+                                disabled={!isApartmentValid}
+                            >
+                                {t('reservationComponent.reserveButton')}
+                            </button>
+                            {/* Модальное окно */}
+                            {isModalOpen && (
+                                <div className="modal-overlay">
+                                    <div className="modal-content">
+                                        <div style={{ display: "flex" }}>
+                                            <div className="email-template">
+                                                <h4>{t('reservationComponent.livingConditions')}</h4>
+                                                {/* Тут письмо */}
+                                                <Trans
+                                                    i18nKey="reservationComponent.modalText"
+                                                    components={[<br />]}
+                                                />
+                                            </div>
+                                            <div className="modal-call-manager">
+                                                <Trans
+                                                    i18nKey="reservationComponent.attentionText"
+                                                    components={[<br />]}
+                                                />
+                                                <div className="phone-number-container">
+                                                    <a className="phone-number" href="tel:+380634487370" style={{ textDecoration: "none" }}>+380634487370</a>
+                                                    <button className="copy-button" onClick={copyPhoneNumber}>
+                                                        <i className="fa-solid fa-copy"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div style={{display:"flex", justifyContent:"space-between"}}>
-                                        <div className="checkbox-container" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                            <label className="modal-do-u-agree-label">
-                                                <input 
-                                                    type="checkbox" 
-                                                    checked={isChecked} 
-                                                    onChange={handleAgree}
-                                                />
-                                                Вы согласны с нашими правилами проживания и условиями пользования
-                                            </label>
+                                        <div style={{display:"flex", justifyContent:"space-between"}}>
+                                            <div className="checkbox-container" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                                <label className="modal-do-u-agree-label">
+                                                    <input 
+                                                        type="checkbox" 
+                                                        checked={isChecked} 
+                                                        onChange={handleAgree}
+                                                    />
+                                                    {t('reservationComponent.agreeWithRules')}
+                                                </label>
+                                            </div>
+                                            <button 
+                                                className="modal-submit-button"
+                                                disabled={!isChecked} 
+                                                onClick={handleSubmitReservation}
+                                            >
+                                                {t('reservationComponent.submitReservation')}
+                                            </button>
                                         </div>
-                                        <button 
-                                            className="modal-submit-button"
-                                            disabled={!isChecked} 
-                                            onClick={handleSubmitReservation}
-                                        >
-                                            Оставить заявку на бронирование
-                                        </button>
+                                        <button className="close-modal" onClick={closeModal}>❌</button>
                                     </div>
-                                    <button className="close-modal" onClick={closeModal}>❌</button>
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
+                    </div>
+                    <div className="about-description">
+                        <div className="about-description-container">
+                            {apartment.description}
+                        </div>
                     </div>
                 </div>
-                <div className="about-description">{apartment.description}</div>
-            </div>
-            </>
-        )}
-    </div>
-  )
+                </>
+            )}
+        </div>
+    )
 }
 
 export default ReservationComponent

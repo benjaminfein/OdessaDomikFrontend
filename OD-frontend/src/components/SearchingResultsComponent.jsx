@@ -4,10 +4,14 @@ import { getAvailableApartments } from '../services/ApartmentService';
 import CalendarComponent from './CalendarComponent';
 import GuestCounterComponent from './GuestCounterComponent';
 import Cookies from 'js-cookie';
-import '../App.css';
 import ScrollToTopButtonComponent from './ScrollToTopButtonComponent';
+import i18n from '../i18n';
+import { useTranslation } from 'react-i18next';
+import { getApartmentPhotos } from '../services/S3Service';
+import '../App.css';
 
 const SearchingResultsComponent = () => {
+    const { t, ready } = useTranslation();
     const location = useLocation();
     const navigate = useNavigate();
     const [apartments, setApartments] = useState([]);
@@ -69,13 +73,19 @@ const SearchingResultsComponent = () => {
         console.log("Запрос к серверу с параметрами:", dates.checkIn, dates.checkOut, guestCount);
         try {
             const response = await getAvailableApartments(dates.checkIn || "", dates.checkOut || "", guestCount);
-            console.log("Ответ от сервера:", response.data);
-            setApartments(response.data);
-            setOriginalApartments(response.data); // Сохраняем оригинальный массив для сортировки
+            const apartmentsWithPhotos = await Promise.all(
+                response.data.map(async (apartment) => {
+                    const photos = await getApartmentPhotos(apartment.id);
+                    return { ...apartment, photoUrls: photos };
+                })
+            );
+    
+            setApartments(apartmentsWithPhotos);
+            setOriginalApartments(apartmentsWithPhotos);
         } catch (error) {
             console.error("Ошибка при загрузке квартир:", error);
         }
-    };
+    };    
 
     useEffect(() => {
         const fetchMaxGuests = async () => {
@@ -113,11 +123,11 @@ const SearchingResultsComponent = () => {
         // Если даты НЕ выбраны, передаем только количество гостей в navigate
         if (!dates.checkIn || !dates.checkOut) {
             console.log("Даты не выбраны, ищем все квартиры по кол-ву гостей!");
-            navigate('/searching-results', { state: { checkIn: '', checkOut: '', guestCount } });
+            navigate(`/${i18n.language}/searching-results`, { state: { checkIn: '', checkOut: '', guestCount } });
         } else {
             // Если даты выбраны, передаем и даты, и кол-во гостей в navigate
             console.log("Даты выбраны, ищем квартиры по датам и кол-ву гостей!");
-            navigate('/searching-results', { state: { checkIn: dates.checkIn, checkOut: dates.checkOut, guestCount } });
+            navigate(`/${i18n.language}/searching-results`, { state: { checkIn: dates.checkIn, checkOut: dates.checkOut, guestCount } });
         }
     
         // Выполняем запрос к серверу, чтобы обновить список квартир на основе переданных параметров
@@ -166,17 +176,19 @@ const SearchingResultsComponent = () => {
         }
     };
 
+    if (!ready) return null;
+
     return (
         <div className="my-page">
             <div className="container">
                 {/* Заголовок по центру */}
-                <h2 className="list-of-apartments-text text-center">Варианты квартир с выбранными характеристиками:</h2>
+                <h2 className="list-of-apartments-text text-center">{t('searchingResults.apartmentsListTitle')}</h2>
 
                 {/* Форма поиска */}
                 <div className="wrapper-parallax" style={{width: "97%"}}>
                     <CalendarComponent dates={dates} setDates={setDates} />
                     <GuestCounterComponent guestCount={guestCount} setGuestCount={setGuestCount} maxGuests={maxGuests} />
-                    <button className='search-button' onClick={handleSearch}>Поиск</button>
+                    <button className='search-button' onClick={handleSearch}>{t('main.search')}</button>
                 </div>
 
                 {/* Контейнер с кнопкой сортировки слева */}
@@ -192,27 +204,27 @@ const SearchingResultsComponent = () => {
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                             >
-                                Сортировать
+                                {t('searchingResults.sort')}
                             </button>
                             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li>
                                     <button className="dropdown-item" onClick={() => setSortOption('asc')}>
-                                        По возрастанию цены
+                                        {t('searchingResults.sortByAsc')}
                                     </button>
                                 </li>
                                 <li>
                                     <button className="dropdown-item" onClick={() => setSortOption('desc')}>
-                                        По убыванию цены
+                                        {t('searchingResults.sortByDesc')}
                                     </button>
                                 </li>
                                 <li>
                                     <button className="dropdown-item" onClick={() => setSortOption('new')}>
-                                        Сначала новые
+                                        {t('searchingResults.sortByNew')}
                                     </button>
                                 </li>
                                 <li>
                                     <button className="dropdown-item" onClick={() => setSortOption('old')}>
-                                        Сначала старые
+                                        {t('searchingResults.sortByOld')}
                                     </button>
                                 </li>
                             </ul>
@@ -228,7 +240,7 @@ const SearchingResultsComponent = () => {
                         <div key={apartment.id} className="apartment-card">
                             <div className="card d-flex flex-column h-100">
                                 <img
-                                    src="https://www.trimarkproperties.com/gainesville/sabal-palms/luxury-apartments/og.jpg"
+                                    src={apartment.photoUrls?.[0] || "https://via.placeholder.com/400x300?text=Нет+фото"}
                                     className="apartment-img"
                                     alt={apartment.name}
                                 />
@@ -247,7 +259,7 @@ const SearchingResultsComponent = () => {
                                                 const totalPrice = calculateTotalPrice(apartment.price);
 
                                                 Cookies.set('totalPrice', totalPrice, { expires: 1 });
-                                                navigate(`/apartments/${apartment.id}/reservation`, {
+                                                navigate(`/${i18n.language}/apartments/${apartment.id}/reservation`, {
                                                     state: {
                                                         checkIn: dates.checkIn,
                                                         checkOut: dates.checkOut,
@@ -258,7 +270,7 @@ const SearchingResultsComponent = () => {
                                             }}
                                             className="apartment-btn"
                                             >
-                                            Наличие мест
+                                            {t('searchingResults.availability')}
                                             </a>
                                         </div>
                                         :
@@ -269,7 +281,7 @@ const SearchingResultsComponent = () => {
                                             setShowPrices(true);
                                         }}
                                         >
-                                            Показать цены
+                                            {t('searchingResults.showPrices')}
                                         </button>
                                     }
                                 </div>

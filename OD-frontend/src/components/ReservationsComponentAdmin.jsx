@@ -173,7 +173,7 @@ const ReservationsComponentAdmin = () => {
                         <tr key={reservation.id} className={getStatusClass(reservation.status)}>
                             <td>{reservation.id}</td>
                             <td>
-                              <a href={`/apartments/apartment-details/${reservation.apartmentId}`}>
+                              <a href={`/${i18n.language}/apartments/apartment-details/${reservation.apartmentId}`}>
                                 {getApartmentById(reservation.apartmentId)?.name || "Загрузка..."}
                               </a>
                             </td>

@@ -1,5 +1,5 @@
 {
-  "name": "odessa_domik-frontend",
+  "name": "cd",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,10 +10,14 @@
   "dependencies": {
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
+    "i18next": "^25.0.0",
+    "i18next-browser-languagedetector": "^8.0.4",
+    "i18next-http-backend": "^3.0.2",
     "js-cookie": "^3.0.5",
     "react": "^18.3.1",
     "react-calendar": "^5.1.0",
     "react-dom": "^18.3.1",
+    "react-i18next": "^15.4.1",
     "react-router-dom": "^6.28.0",
     "react-select": "^5.10.1"
   },
