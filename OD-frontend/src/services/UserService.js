@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from "./AxiosInstance";
 
-const REST_API_BASE_URL = 'http://localhost:8090/api/user';
+const REST_API_BASE_URL = '/user';
 
 export const registration = (username, email, name, phoneNumber, password) => {
     return axios.post(

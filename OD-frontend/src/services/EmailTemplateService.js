@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from "./AxiosInstance";
 
-const REST_API_BASE_URL = 'http://localhost:8090/api/email-templates';
+const REST_API_BASE_URL = '/email-templates';
 
 export const listTemplates = () => axios.get(REST_API_BASE_URL + "/get-all-templates");
 

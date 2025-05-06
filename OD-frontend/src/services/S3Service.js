@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from "./AxiosInstance";
 
-const REST_API_BASE_URL = 'http://localhost:8090/api/s3';
+const REST_API_BASE_URL = '/s3';
 
 export const getApartmentPhotos = async (apartmentId) => {
     try {

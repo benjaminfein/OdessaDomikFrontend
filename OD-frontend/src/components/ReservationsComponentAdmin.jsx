@@ -3,6 +3,7 @@ import { listReservations, getApartment, deleteReservation } from '../services/A
 import { getUserById } from '../services/UserService';
 import { placeReservationOnHold, cancelReservation, confirmReservation } from '../services/ApartmentService';
 import SelectorComponent from './SelectorComponent';
+import i18n from '../i18n';
 import '../App.css'
 
 const ReservationsComponentAdmin = () => {
